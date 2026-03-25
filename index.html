@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="referrer" content="no-referrer">
+    <title>Sukie Xie | Portfolio</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <style>
+        :root {
+            --bg-black: #000000;
+            --text-white: #FFFFFF;
+            --accent-yellow: #FFD700;
+            --text-gray: #A1A1A6;
+            --highlight-orange: #FF6B00;
+        }
+
+        html { -webkit-text-size-adjust: none; text-size-adjust: none; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--bg-black);
+            font-family: -apple-system, "SF Pro Display", "PingFang SC", sans-serif;
+            color: var(--text-white);
+            overflow-x: hidden;
+            line-height: 1.5;
+            -webkit-touch-callout: none; -webkit-user-select: none; user-select: none;
+        }
+        img { -webkit-user-drag: none; user-drag: none; pointer-events: auto; }
+
+        nav {
+            position: fixed; top: 0; width: 100%; height: 60px;
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 0 5%; z-index: 1000;
+            background: rgba(0,0,0,0.8); backdrop-filter: blur(10px);
+        }
+        .logo { font-weight: 800; font-size: 18px; }
+        .btn-touch { 
+            background: var(--accent-yellow); color: black; padding: 6px 15px; 
+            border-radius: 20px; font-weight: bold; text-decoration: none; font-size: 12px;
+        }
+
+        section {
+            min-height: 100vh; width: 100%; display: flex; align-items: center; justify-content: center;
+            padding: 80px 8% 40px; border-bottom: 1px solid #111; position: relative; overflow: hidden;
+        }
+
+        .content-grid, .hero-content { z-index: 1; position: relative; width: 100%; }
+        .hero { text-align: center; margin-bottom: 80px; padding-bottom: 40px; }
+        .hero-content { display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .hello-title { font-size: clamp(40px, 8vw, 90px); font-weight: 800; color: var(--accent-yellow); margin-bottom: 20px; }
+        .im-name { display: flex; align-items: center; justify-content: center; gap: 15px; font-size: clamp(28px, 5vw, 70px); font-weight: 800; margin-bottom: 30px; flex-wrap: wrap; }
+        .avatar-box { width: clamp(70px, 9vw, 100px); height: clamp(70px, 9vw, 100px); background: #2D2D2D; border-radius: 24px; overflow: hidden; border: 2px solid #444; }
+        .avatar-box img { width: 100%; height: 100%; object-fit: cover; }
+        .hero-desc { max-width: 600px; font-size: 16px; color: var(--text-gray); margin: 0 auto; line-height: 1.6; }
+
+        .content-grid { display: grid; grid-template-columns: 0.9fr 1.4fr; gap: 40px; align-items: center; max-width: 1400px; }
+        .content-grid.img-left { grid-template-columns: 1.4fr 0.9fr; }
+
+        .brand-h { font-size: clamp(20px, 2.5vw, 32px); font-weight: 800; margin-bottom: 12px; }
+        .sub-h { font-size: 15px; font-weight: 600; margin-bottom: 15px; display: block; }
+        
+        ul { list-style: none; }
+        ul li { position: relative; padding-left: 18px; margin-bottom: 8px; font-size: 13px; color: var(--text-gray); text-align: justify; list-style: none; line-height: 1.4; }
+        ul li::before { content: "•"; position: absolute; left: 0; color: var(--highlight-orange); font-weight: bold; }
+        
+        .footer-text { font-size: 12px; color: var(--text-gray); border-top: 1px solid #222; padding-top: 12px; line-height: 1.4; }
+
+        .carousel-container {
+            position: relative; width: 100%; height: 70vh; overflow: hidden; 
+            border-radius: 24px; 
+            background: #111; box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+        }
+        .carousel-slides { display: flex; width: 100%; height: 100%; transition: transform 0.5s ease; }
+        .carousel-slide { flex: 0 0 100%; position: relative; background: #000; }
+        .carousel-slide img { width: 100%; height: 100%; object-fit: contain; }
+
+        .hover-overlay {
+            position: absolute; inset: 0; background: rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center;
+            opacity: 0; transition: opacity 0.3s; z-index: 20;
+        }
+        .carousel-slide:hover .hover-overlay, .swisse-card-img:hover .hover-overlay { opacity: 1; }
+        .view-detail-btn { background: var(--accent-yellow); color: black; padding: 10px 24px; border-radius: 30px; font-weight: 800; font-size: 13px; border: none; cursor: pointer; }
+
+        .carousel-btn {
+            position: absolute; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.6); color: white; border: none;
+            width: 40px; height: 40px; border-radius: 50%; cursor: pointer; z-index: 50; display: flex; align-items: center; justify-content: center;
+        }
+        .carousel-btn.prev { left: 10px; }
+        .carousel-btn.next { right: 10px; }
+        .carousel-dots { position: absolute; bottom: 15px; width: 100%; display: flex; justify-content: center; gap: 8px; z-index: 50; }
+        .dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,0.3); transition: background 0.3s; }
+        .dot.active { background: var(--accent-yellow); width: 12px; border-radius: 3px; }
+
+        /* ======== 飘柔专属苹果风排版与胶囊UI ======== */
+        .stacked-layout { max-width: 1000px; width: 100%; margin: 0 auto; display: flex; flex-direction: column; gap: 40px; z-index: 1; position: relative;}
+        .stacked-text { width: 100%; }
+        .stacked-layout .carousel-container { height: 60vh; border-radius: 24px; }
+        
+        .apple-gallery-wrapper { width: 100%; display: flex; flex-direction: column; align-items: center; }
+        .apple-carousel-container {
+            position: relative; width: 100%; height: 60vh; overflow: hidden; 
+            border-radius: 24px; 
+            background: #111; box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+        }
+        
+        .apple-pills-wrapper { width: 100%; display: flex; justify-content: center; margin-top: 15px; }
+        .apple-pills { 
+            display: inline-flex; align-items: center; background: #1C1C1E; 
+            padding: 4px; border-radius: 40px; 
+            max-width: 100%; overflow-x: auto; scrollbar-width: none;
+            box-shadow: inset 0 0 0 1px rgba(255,255,255,0.05);
+        }
+        .apple-pills::-webkit-scrollbar { display: none; }
+        .apple-pills .pill { 
+            background: transparent; color: #A1A1A6; border: none; 
+            padding: 8px 24px; border-radius: 40px; font-size: 13px; font-weight: 600; 
+            cursor: pointer; transition: all 0.3s cubic-bezier(0.25, 0.1, 0.25, 1); 
+            white-space: nowrap; flex-shrink: 0;
+        }
+        .apple-pills .pill.active { 
+            background: #FFFFFF; color: #000000; box-shadow: 0 2px 8px rgba(0,0,0,0.2); 
+        }
+
+        .swisse-wrapper { z-index: 1; position: relative; width: 100%; }
+        .swisse-scroll-track {
+            display: flex; gap: 30px; width: 100%; padding-bottom: 20px;
+            overflow-x: auto; overflow-y: hidden; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; 
+        }
+        .swisse-card { flex-shrink: 0; display: flex; flex-direction: column; gap: 15px; scroll-snap-align: start; }
+        .swisse-card-landscape { width: calc(45vh * 16 / 9); }
+        .swisse-card-portrait { width: calc(45vh * 3 / 4); }
+        .swisse-card-img { width: 100%; height: 45vh; border-radius: 24px; overflow: hidden; position: relative; background: #111; }
+        .swisse-card-img img { width: 100%; height: 100%; object-fit: cover; }
+        .swisse-card-text { font-size: 14px; color: var(--text-gray); padding: 0 5px; text-align: justify; }
+
+        .lightbox-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95);
+            z-index: 10000; display: none; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s;
+        }
+        .lightbox-overlay.active { display: flex; opacity: 1; }
+        .lightbox-content { position: relative; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; }
+        .lb-close { position: absolute; top: 20px; right: 20px; color: white; font-size: 35px; background: none; border: none; cursor: pointer; z-index: 10010; }
+        .lb-nav { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.1); color: white; border: none; width: 50px; height: 50px; border-radius: 50%; font-size: 24px; cursor: pointer; z-index: 10010; }
+        .lb-nav.prev { left: 15px; }
+        .lb-nav.next { right: 15px; }
+        .lightbox-img { max-width: 90%; max-height: 85vh; object-fit: contain; }
+
+        .lazy-img { filter: blur(5px); transition: filter 0.4s ease-out; }
+        .lazy-img.loaded { filter: blur(0); }
+        .swisse-swipe-hint { display: none; }
+
+        @media (max-width: 1024px) {
+            section { min-height: auto; padding: 80px 6% 60px; }
+            .hero { margin-bottom: 80px; padding-bottom: 40px; }
+            .content-grid { display: flex; flex-direction: column; gap: 20px; }
+            .content-grid.img-left { flex-direction: column-reverse; }
+            
+            .stacked-layout { gap: 25px; }
+            .stacked-layout .carousel-container, .apple-carousel-container { height: 35vh; }
+            .apple-pills .pill { padding: 6px 16px; font-size: 12px; }
+
+            .carousel-container { height: 45vh; border-radius: 20px; }
+            .apple-carousel-container { border-radius: 20px; }
+            
+            .swisse-card-landscape { width: calc(40vh * 16 / 9); }
+            .swisse-card-portrait { width: calc(40vh * 3 / 4); }
+            .swisse-card-img { height: 40vh; border-radius: 20px; }
+            .swisse-card-text { font-size: 13px !important; line-height: 1.6 !important; }
+            .swisse-card-text b { font-size: 13px !important; color: var(--text-white); }
+            .swisse-swipe-hint { display: block; text-align: center; font-size: 12px; color: var(--text-gray); padding: 10px 0 20px; margin-top: -10px; font-weight: 600; }
+            .hover-overlay { opacity: 1; background: none; align-items: flex-end; justify-content: flex-end; padding: 15px; }
+            .view-detail-btn { padding: 6px 15px; font-size: 11px; }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="logo">SUKIE.XIE</div>
+        <a href="mailto:xieis@foxmail.com" class="btn-touch">Connect</a>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hello-title">HELLO!</div>
+            <div class="im-name">
+                <span>I'M</span>
+                <div class="avatar-box"><img src="tx.jpg" alt="Avatar"></div>
+                <span>SUKIE XIE</span>
+            </div>
+            <div class="hero-desc">
+                拥有10年数字营销行业经验，具备从策略规划到项目落地的全链路管理能力。<br>
+                长期服务于世界500强及国内顶尖品牌，对快消、母婴、健康等领域有深刻洞察。<br>
+                在工作之外，有跨领域学习的内在驱动力，对经济周期与半导体行业有长期观察与好奇。
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <div class="stacked-layout">
+            
+            <div class="stacked-text">
+                <h2 class="brand-h">宝洁 品牌长期创策服务 2018 - 2022</h2>
+                <span class="sub-h">飘柔 从30周年庆到爆品上市、公益传播，突破品类消费圈层，探索美的平权</span>
+            </div>
+            <div class="carousel-container" data-gallery="pg-1">
+                <div class="carousel-slides">
+                    <div class="carousel-slide"><img class="lazy-img" data-src="pr1.png"><div class="hover-overlay"><button class="view-detail-btn">查看大图</button></div></div>
+                    <div class="carousel-slide"><img class="lazy-img" data-src="pr2.png"><div class="hover-overlay"><button class="view-detail-btn">查看大图</button></div></div>
+                </div>
+                <button class="carousel-btn prev">◀</button><button class="carousel-btn next">▶</button>
+                <div class="carousel-dots"></div>
+            </div>
+
+            <div class="stacked-text">
+                <ul>
+                    <li>主导行业首款“免洗护发素”从0到1上市策划，面对消费者认知的市场空白，制定“专业信任x场景种草”整合策略，打造「百试不腻吉尼斯挑战事件」「高考营销18岁的美只有一次」等案例，助推新品京东搜索增长 200%，天猫搜索增长166%</li>
+                </ul>
+            </div>
+            <div class="apple-gallery-wrapper">
+                <div class="apple-carousel-container" data-gallery="pg-2">
+                    <div class="carousel-slides">
+                        <div class="carousel-slide"><img class="lazy-img" data-src="pr3.png"><div class="hover-overlay"><button class="view-detail-btn">查看大图</button></div></div>
+                        <div class="carousel-slide"><img class="lazy-img" data-src="pr4.png"><div class="hover-overlay"><button class="view-detail-btn">查看大图</button></div></div>
+                        <div class="carousel-slide"><img class="lazy-img" data-src="pr5.png"><div class="hover-overlay"><button class="view-detail-btn">查看大图</button></div></div>
+                        <div class="carousel-slide"><img class="lazy-img" data-src="pr7.png"><div class="hover-overlay"><button class="view-detail-btn">查看大图</button></div></div>
+                    </div>
+                </div>
+                <div class="apple-pills-wrapper">
+                    <div class="apple-pills">
+                        <button class="pill active">高考营销</button>
+                        <button class="pill">高考纪录片</button>
+                        <button class="pill">吉尼斯挑战事件</button>
+                        <button class="pill">品牌30周年</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="stacked-text">
+                <ul>
+                    <li>视障人群对美的需求几乎无人关注，打破常规以免洗新品解开美的盲区，推出「会说话的护发素」，搭建首个闭眼也能看的变美平台，并吸引头部主播【李佳琦亲自选品】直播推荐，一举打破新品市场僵局</li>
+                </ul>
+            </div>
+            <div class="apple-gallery-wrapper">
+                <div class="apple-carousel-container" data-gallery="pg-3">
+                    <div class="carousel-slides">
+                        <div class="carousel-slide"><img class="lazy-img" data-src="pr6.png"><div class="hover-overlay"><button class="view-detail-btn">查看大图</button></div></div>
+                        <div class="carousel-slide"><img class="lazy-img" data-src="pr8.jpg"><div class="hover-overlay"><button class="view-detail-btn">查看大图</button></div></div>
+                    </div>
+                </div>
+                <div class="apple-pills-wrapper">
+                    <div class="apple-pills">
+                        <button class="pill active">无障碍公益</button>
+                        <button class="pill">山区儿童公益</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="stacked-text">
+                <p class="sub-h" style="border-top: 1px solid #222; padding-top: 15px; margin-top: 10px;">负责海飞丝头皮健康白皮书传播、吉列新品上市&明星直播、宝洁洗发品类商超国风 CNY 营销。从深挖洞察，到专业化背书、social、线下渠道全链路营销覆盖</p>
+            </div>
+            <div class="carousel-container" data-gallery="pg-4">
+                <div class="carousel-slides">
+                    <div class="carousel-slide"><img class="lazy-img" data-src="pg1.png"><div class="hover-overlay"><button class="view-detail-btn">查看大图</button></div></div>
+                    <div class="carousel-slide"><img class="lazy-img" data-src="pg2.png"><div class="hover-overlay"><button class="view-detail-btn">查看大图</button></div></div>
+                </div>
+                <button class="carousel-btn prev">◀</button><button class="carousel-btn next">▶</button>
+                <div class="carousel-dots"></div>
+            </div>
+
+        </div>
+    </section>
+
+    <section>
+        <div class="swisse-wrapper">
+            <div class="swisse-header"><p class="tag-line">LIFESTYLE & SOCIAL</p><h2 class="brand-h">斯维诗</h2></div>
+            <div class="swisse-scroll-track" data-gallery="swisse">
+                <div class="swisse-card swisse-card-landscape">
+                    <div class="swisse-card-img"><img class="lazy-img" data-src="sws1.png"><div class="hover-overlay"><button class="view-detail-btn">查看大图</button></div></div>
+                    <div class="swisse-card-text"><b>保健品=老登? NO!</b> 围绕时尚健康新叙事，借势三八节发起「万物皆可斯维诗」小红书全名共创，打破刻板印象。</div>
+                </div>
+                <div class="swisse-card swisse-card-portrait">
+                    <div class="swisse-card-img"><img class="lazy-img" data-src="sws2.png"><div class="hover-overlay"><button class="view-detail-btn">查看大图</button></div></div>
+                    <div class="swisse-card-text">成功引领胶原水光瓶成为社交媒体“新时尚”，<b>实现从功能性向生活方式的强势破圈</b>。</div>
+                </div>
+                <div class="swisse-card swisse-card-landscape">
+                    <div class="swisse-card-img"><img class="lazy-img" data-src="dbf1.png"><div class="hover-overlay"><button class="view-detail-btn">查看大图</button></div></div>
+                    <div class="swisse-card-text">切入时尚运动赛道，携手冲浪垂类圈层，<b>将蛋白粉打造成时尚运动圈层新宠</b>.</div>
+                </div>
+                <div class="swisse-card swisse-card-portrait">
+                    <div class="swisse-card-img"><img class="lazy-img" data-src="dbf2.png"><div class="hover-overlay"><button class="view-detail-btn">查看大图</button></div></div>
+                    <div class="swisse-card-text">于三亚万宁落地「浪尖 S 俱乐部」快闪活动，以“强种草+天猫超市周年庆联动”驱动传播爆发，<b>达成总曝光 7700W+ 次</b>.</div>
+                </div>
+            </div>
+            <div class="swisse-swipe-hint">「左右滑动查看」</div>
+        </div>
+    </section>
+
+    <section>
+        <div class="content-grid">
+            <div class="project-text">
+                <p class="tag-line">ENTERTAINMENT MARKETING</p>
+                <h2 class="brand-h">合生元 <span style="color:var(--highlight-orange)">品牌年轻化和综艺IP营销</span></h2>
+                <ul>
+                    <li>育儿焦虑、“新国标”多重挑战之下，为品牌焕新「妈妈少担心」主体性表达，策划综艺《披荆斩棘哥哥》王耀庆《乘风破浪姐姐》Ella植入营销，精准传递松弛育儿观和品牌内在保护独特RTB，相关TVC视频播放量高达 2.1 亿，全网总曝光量达到 7.4 亿</li>
+                    <li>针对核心母婴店，策划每月“奶粉+营养品”销冠组合活动，以品牌理念x亲子体验双赋能渠道转化</li>
+                </ul>
+            </div>
+            <div class="carousel-container" data-gallery="biostime">
+                <div class="carousel-slides">
+                    <div class="carousel-slide"><img class="lazy-img" data-src="hsy1.png"><div class="hover-overlay"><button class="view-detail-btn">查看大图</button></div></div>
+                    <div class="carousel-slide"><img class="lazy-img" data-src="hsy2.png"><div class="hover-overlay"><button class="view-detail-btn">查看大图</button></div></div>
+                    <div class="carousel-slide"><img class="lazy-img" data-src="hsy3.jpg"><div class="hover-overlay"><button class="view-detail-btn">查看大图</button></div></div>
+                </div>
+                <button class="carousel-btn prev">◀</button><button class="carousel-btn next">▶</button>
+                <div class="carousel-dots"></div>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <div class="content-grid img-left">
+            <div class="carousel-container" data-gallery="nongfu">
+                <div class="carousel-slides">
+                    <div class="carousel-slide"><img class="lazy-img" data-src="nfsq.png"><div class="hover-overlay"><button class="view-detail-btn">查看大图</button></div></div>
+                </div>
+            </div>
+            <div class="project-text">
+                <p class="tag-line">BRAND STORYTELLING</p>
+                <h2 class="brand-h">农夫山泉 武夷山泡茶水</h2>
+                <span class="sub-h" style="color:var(--highlight-orange)">慢营销深耕品类文化叙事，固圈强建立消费者心智</span>
+                <ul>
+                    <li>泡茶需专门的水，频遭质疑“智商税”，疫情期亲自探访武夷山水源地，被困此地，远程与团队协作打磨营销方案</li>
+                    <li>提出“固圈”慢营销策略，从春日抢头茶到夏日泡入好山好水，精准抖音茶艺品茶垂类KOL，在高端水市场存量博弈中渗透心智</li>
+                    <li>打造探寻武夷自然与人文，暨公关发布会直播，点燃京东超级品类日</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <div class="lightbox-overlay" id="lbOverlay">
+        <button class="lb-close" id="lbClose">✕</button>
+        <button class="lb-nav prev" id="lbPrev">◀</button>
+        <div class="lightbox-content"><img src="" class="lightbox-img" id="lbImg"></div>
+        <button class="lb-nav next" id="lbNext">▶</button>
+    </div>
+
+    <script>
+        function initLazyLoad() {
+            const obs = new IntersectionObserver((entries) => {
+                entries.forEach(en => {
+                    if(en.isIntersecting) {
+                        const img = en.target;
+                        const realSrc = img.getAttribute('data-src');
+                        if (realSrc) {
+                            // 彻底本地化，直接加载src，不需要data-fallback
+                            img.src = realSrc;
+                            img.onload = () => img.classList.add('loaded');
+                            img.onerror = () => img.classList.add('loaded'); 
+                            // 3秒无条件结束模糊
+                            setTimeout(() => img.classList.add('loaded'), 3000);
+                        }
+                        obs.unobserve(img);
+                    }
+                });
+            }, {rootMargin: "600px"});
+            document.querySelectorAll('.lazy-img').forEach(img => obs.observe(img));
+        }
+
+        function initCarousels() {
+            document.querySelectorAll('.carousel-container').forEach(con => {
+                const slides = con.querySelector('.carousel-slides');
+                const total = slides.children.length;
+                const dotsCon = con.querySelector('.carousel-dots');
+                let idx = 0;
+                if (total <= 1) return;
+                if (dotsCon) {
+                    for(let i=0; i<total; i++) {
+                        const dot = document.createElement('div');
+                        dot.className = 'dot' + (i===0?' active':'');
+                        dotsCon.appendChild(dot);
+                    }
+                }
+                const update = () => {
+                    slides.style.transform = `translateX(-${idx*100}%)`;
+                    if (dotsCon) dotsCon.querySelectorAll('.dot').forEach((d,i) => d.className = i===idx?'dot active':'dot');
+                };
+                con.querySelector('.prev')?.addEventListener('click', (e) => { e.stopPropagation(); idx=(idx-1+total)%total; update(); });
+                con.querySelector('.next')?.addEventListener('click', (e) => { e.stopPropagation(); idx=(idx+1)%total; update(); });
+                let sX = 0;
+                con.addEventListener('touchstart', (e) => sX = e.touches[0].clientX, {passive:true});
+                con.addEventListener('touchend', (e) => {
+                    let dX = e.changedTouches[0].clientX - sX;
+                    if(Math.abs(dX) > 50) { if(dX > 0) idx=(idx-1+total)%total; else idx=(idx+1)%total; update(); }
+                });
+            });
+        }
+
+        function initAppleCarousels() {
+            document.querySelectorAll('.apple-gallery-wrapper').forEach(wrapper => {
+                const slides = wrapper.querySelector('.carousel-slides');
+                const total = slides.children.length;
+                const pillsWrapper = wrapper.querySelector('.apple-pills'); 
+                const pills = wrapper.querySelectorAll('.apple-pills .pill');
+                let idx = 0;
+                let autoPlayTimer;
+
+                const update = () => {
+                    slides.style.transform = `translateX(-${idx * 100}%)`;
+                    pills.forEach((pill, i) => {
+                        pill.classList.toggle('active', i === idx);
+                        if (i === idx && pillsWrapper) {
+                            const scrollPos = pill.offsetLeft - (pillsWrapper.clientWidth / 2) + (pill.clientWidth / 2);
+                            pillsWrapper.scrollTo({ left: scrollPos, behavior: 'smooth' });
+                        }
+                    });
+                };
+
+                const startAutoPlay = () => {
+                    stopAutoPlay();
+                    autoPlayTimer = setInterval(() => { idx = (idx + 1) % total; update(); }, 4500); 
+                };
+                const stopAutoPlay = () => clearInterval(autoPlayTimer);
+
+                pills.forEach((pill, i) => {
+                    pill.addEventListener('click', () => { idx = i; update(); startAutoPlay(); });
+                });
+
+                let sX = 0;
+                const con = wrapper.querySelector('.apple-carousel-container');
+                con.addEventListener('touchstart', (e) => { sX = e.touches[0].clientX; stopAutoPlay(); }, {passive:true});
+                con.addEventListener('touchend', (e) => {
+                    let dX = e.changedTouches[0].clientX - sX;
+                    if(Math.abs(dX) > 50) {
+                        if(dX > 0) idx = (idx - 1 + total) % total;
+                        else idx = (idx + 1) % total;
+                        update();
+                    }
+                    startAutoPlay();
+                });
+
+                wrapper.addEventListener('mouseenter', stopAutoPlay);
+                wrapper.addEventListener('mouseleave', startAutoPlay);
+
+                startAutoPlay();
+            });
+        }
+
+        function initGalleryLightbox() {
+            const lb = document.getElementById('lbOverlay');
+            const lbImg = document.getElementById('lbImg');
+            let currentImgs = []; let currentIdx = 0;
+            const openLb = (galleryId, startSrc) => {
+                const container = document.querySelector(`[data-gallery="${galleryId}"]`);
+                // 灯箱依然保持本地图，确保速度
+                currentImgs = Array.from(container.querySelectorAll('img')).map(i => i.src || i.getAttribute('data-src'));
+                currentIdx = currentImgs.indexOf(startSrc);
+                if (currentIdx === -1) currentIdx = 0; 
+                lbImg.src = currentImgs[currentIdx];
+                lb.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            };
+            document.querySelectorAll('.view-detail-btn').forEach(btn => {
+                btn.onclick = (e) => {
+                    e.stopPropagation();
+                    const con = btn.closest('[data-gallery]');
+                    const img = btn.closest('.carousel-slide, .swisse-card, .swisse-card-img').querySelector('img');
+                    openLb(con.dataset.gallery, img.src || img.getAttribute('data-src'));
+                };
+            });
+            const show = (dir) => {
+                currentIdx = (currentIdx + dir + currentImgs.length) % currentImgs.length;
+                lbImg.src = currentImgs[currentIdx];
+            };
+            document.getElementById('lbPrev').onclick = (e) => { e.stopPropagation(); show(-1); };
+            document.getElementById('lbNext').onclick = (e) => { e.stopPropagation(); show(1); };
+            document.getElementById('lbClose').onclick = () => { lb.classList.remove('active'); document.body.style.overflow=''; };
+            lb.onclick = (e) => { if(e.target === lb || e.target.className === 'lightbox-content') document.getElementById('lbClose').click(); };
+        }
+
+        function createWatermark(text) {
+            const canvas = document.createElement('canvas');
+            canvas.width = 320; canvas.height = 200;
+            const ctx = canvas.getContext('2d');
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.05)'; 
+            ctx.font = '16px sans-serif';
+            ctx.rotate(-20 * Math.PI / 180);
+            ctx.fillText(text, 20, 100);
+            const div = document.createElement('div');
+            div.style.position = 'fixed'; div.style.top = '0'; div.style.left = '0';
+            div.style.width = '100vw'; div.style.height = '100vh';
+            div.style.pointerEvents = 'none'; div.style.zIndex = '9998'; 
+            div.style.backgroundImage = `url(${canvas.toDataURL('image/png')})`;
+            document.body.appendChild(div);
+        }
+
+        window.onload = () => {
+            try {
+                if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
+                    gsap.registerPlugin(ScrollTrigger);
+                    gsap.utils.toArray('section').forEach(sec => {
+                        gsap.from(sec.querySelectorAll('.project-text, .carousel-container, .swisse-wrapper, .stacked-text, .apple-gallery-wrapper'), {
+                            scrollTrigger: { trigger: sec, start: "top 85%" },
+                            y: 30, opacity: 0, duration: 0.8, stagger: 0.1
+                        });
+                    });
+                }
+            } catch (error) {
+                console.warn("外部动画库加载被拦截，已自动启动备用显示方案");
+            }
+
+            initLazyLoad(); 
+            initCarousels(); 
+            initAppleCarousels(); 
+            initGalleryLightbox();
+            createWatermark('Sukie作品，严禁外传');
+            document.addEventListener('contextmenu', e => e.preventDefault());
+        };
+    </script>
+</body>
+</html>
