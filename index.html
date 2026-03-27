@@ -50,11 +50,8 @@
             border-radius: 20px; font-weight: bold; text-decoration: none; font-size: 14px;
         }
 
-        /* 苹果风文字高亮效果：纯白 + 半粗体 */
-        b, strong {
-            color: var(--text-white);
-            font-weight: 600;
-        }
+        /* 纯白 + 半粗体高亮 */
+        b, strong { color: var(--text-white); font-weight: 600; }
 
         section {
             min-height: 100vh;
@@ -63,29 +60,16 @@
             background-color: var(--bg-black);
         }
         
-        /* 极简、通透的Apple发光银线 */
+        /* 极简、通透的发光银线 */
         section:not(.hero)::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 5%; 
-            width: 90%;
-            height: 1px;
+            content: ""; position: absolute; top: 0; left: 5%; width: 90%; height: 1px;
             background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.9) 50%, transparent 100%);
-            box-shadow: 0 0 10px 1px rgba(255, 255, 255, 0.35); 
-            z-index: 2; 
-            pointer-events: none;
+            box-shadow: 0 0 10px 1px rgba(255, 255, 255, 0.35); z-index: 2; pointer-events: none;
         }
         section:not(.hero)::after {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 120px;
+            content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 120px;
             background: radial-gradient(ellipse at top center, rgba(255, 255, 255, 0.05) 0%, transparent 70%);
-            z-index: 0;
-            pointer-events: none;
+            z-index: 0; pointer-events: none;
         }
 
         .content-grid, .hero-content { z-index: 1; position: relative; width: 100%; }
@@ -115,27 +99,28 @@
         
         .footer-text { font-size: 14px; color: var(--text-gray); border-top: 1px solid #222; padding-top: 12px; line-height: 1.4; }
 
-        /* 轮播图去灰框，自适应高度，完全铺满不裁剪 */
+        /* ======== 轮播容器优化：完美包裹图片，消除巨大空隙 ======== */
         .carousel-container {
             position: relative; width: 100%; height: auto; overflow: hidden; 
             border-radius: 12px; background: transparent; box-shadow: none; 
         }
         .carousel-slides { display: flex; width: 100%; height: auto; transition: transform 0.5s ease; align-items: center; }
-        .carousel-slide { flex: 0 0 100%; position: relative; background: transparent; display: flex; justify-content: center; }
-        .carousel-slide img { width: 100%; height: auto; max-height: 75vh; object-fit: contain; border-radius: 12px; display: block; }
+        .carousel-slide { flex: 0 0 100%; position: relative; display: flex; justify-content: center; }
+        .carousel-slide img { width: 100%; height: auto; display: block; object-fit: contain; border-radius: 12px; }
 
         .hover-overlay {
             position: absolute; inset: 0; background: transparent; display: flex; align-items: center; justify-content: center;
-            opacity: 0; transition: opacity 0.3s; z-index: 20; pointer-events: none; 
+            opacity: 0; transition: opacity 0.3s; z-index: 20; pointer-events: none; border-radius: 12px;
         }
         .carousel-slide:hover .hover-overlay, .swisse-card-img:hover .hover-overlay { opacity: 1; }
         
-        /* PC端黄色按钮 */
+        /* PC端黄色胶囊按钮 */
         .view-detail-btn { 
             background: var(--accent-yellow); color: black; padding: 10px 24px; border-radius: 30px;
             font-weight: 800; font-size: 14px; border: none; cursor: pointer; pointer-events: auto; 
         }
 
+        /* 绝对居中两侧的箭头，永不位移 */
         .carousel-btn {
             position: absolute; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.6); color: white; border: none;
             width: 40px; height: 40px; border-radius: 50%; cursor: pointer; z-index: 50;
@@ -147,7 +132,7 @@
         .dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,0.3); transition: background 0.3s; }
         .dot.active { background: var(--accent-yellow); width: 12px; border-radius: 3px; }
 
-        /* ======== 飘柔专属苹果风排版与胶囊UI ======== */
+        /* ======== 飘柔专属排版与胶囊UI ======== */
         .stacked-layout { max-width: 1000px; width: 100%; margin: 0 auto; display: flex; flex-direction: column; gap: 40px; z-index: 1; position: relative;}
         .stacked-text { width: 100%; }
         
@@ -162,19 +147,16 @@
             display: inline-flex; align-items: center; background: #1C1C1E; 
             padding: 4px; border-radius: 40px; 
             max-width: 100%; overflow-x: auto; scrollbar-width: none;
-            box-shadow: inset 0 0 0 1px rgba(255,255,255,0.05);
-            scroll-behavior: smooth; 
+            box-shadow: inset 0 0 0 1px rgba(255,255,255,0.05); scroll-behavior: smooth; 
         }
         .apple-pills::-webkit-scrollbar { display: none; }
         .apple-pills .pill { 
             background: transparent; color: #A1A1A6; border: none; 
             padding: 8px 24px; border-radius: 40px; font-size: 14px; font-weight: 600; 
-            cursor: pointer; transition: all 0.3s cubic-bezier(0.25, 0.1, 0.25, 1); 
-            white-space: nowrap; flex-shrink: 0;
+            cursor: pointer; transition: all 0.3s cubic-bezier(0.25, 0.1, 0.25, 1); white-space: nowrap; flex-shrink: 0;
         }
         .apple-pills .pill.active { background: #FFFFFF; color: #000000; box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
 
-        /* 观看影片按钮（Apple细粒度优化设计） */
         .apple-cta-wrapper {
             width: 100%; display: flex; justify-content: center;
             height: 18px; margin-top: 12px; opacity: 0; pointer-events: none; transition: opacity 0.3s ease-in-out;
@@ -193,29 +175,21 @@
         }
         .apple-cta:hover .play-icon { transform: scale(1.1); }
 
+        /* ======== 斯维诗图文：完美对齐，锁定物理高度 ======== */
         .swisse-wrapper { z-index: 1; position: relative; width: 100%; }
         .swisse-scroll-track {
             display: flex; gap: 30px; width: 100%; padding-bottom: 20px;
             overflow-x: auto; overflow-y: hidden; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch;
         }
-        
-        /* 斯维诗图文完美对齐 */
-        .swisse-card { flex-shrink: 0; display: flex; flex-direction: column; gap: 15px; scroll-snap-align: start; }
-        .swisse-card-landscape { width: calc(45vh * 16 / 9); max-width: 80vw; }
-        .swisse-card-portrait { width: calc(45vh * 3 / 4); max-width: 60vw; }
-        .swisse-card-img { 
-            width: 100%; height: 45vh; position: relative; background: transparent; display: flex; align-items: center; justify-content: center;
-        }
-        .swisse-card-img img { 
-            max-width: 100%; max-height: 100%; width: auto; height: auto; display: block;
-            object-fit: contain; border-radius: 12px; 
-        }
+        .swisse-card { flex-shrink: 0; display: flex; flex-direction: column; gap: 15px; scroll-snap-align: start; width: max-content; }
+        /* 强制指定容器物理高度，横竖图视觉高度绝对一致 */
+        .swisse-card-img { height: 45vh; display: flex; position: relative; }
+        .swisse-card-img img { height: 100%; width: auto; display: block; object-fit: contain; border-radius: 12px; }
         .swisse-card-text { font-size: 15px; color: var(--text-gray); padding: 0 5px; text-align: justify; }
 
-        /* 压轴收尾板块 (Apple风格) */
+        /* ======== 压轴收尾板块 ======== */
         section.ending-section {
-            min-height: 35vh; 
-            display: flex; align-items: center; justify-content: center; padding: 0 8%;
+            min-height: 35vh; display: flex; align-items: center; justify-content: center; padding: 0 8%;
         }
         .ending-text {
             font-size: clamp(24px, 4vw, 32px); font-weight: 700; color: var(--text-white);
@@ -261,37 +235,26 @@
             .apple-cta { font-size: 12px; }
             .apple-cta .play-icon { width: 14px; height: 14px; font-size: 6px; margin-left: 4px; }
 
-            .carousel-container { height: 45vh; border-radius: 20px; }
-            .apple-carousel-container { border-radius: 20px; }
-            
-            /* 移动端斯维诗图片自适应，高度锁定，横竖图视觉高度绝对对齐 */
-            .swisse-card-landscape { width: calc(55vw * 16 / 9); max-width: 85vw; }
-            .swisse-card-portrait { width: calc(55vw * 3 / 4); max-width: 60vw; }
-            .swisse-card-img { width: 100%; height: 55vw; display: flex; align-items: center; justify-content: center; }
-            .swisse-card-img img { width: auto; height: 100%; max-width: 100%; display: block; object-fit: contain; border-radius: 12px; }
-
+            /* 移动端斯维诗：统一高度 40vh，宽度自适应，杜绝忽大忽小 */
+            .swisse-card-img { height: 40vh; }
             .swisse-card-text { font-size: 15px !important; line-height: 1.6 !important; }
             .swisse-swipe-hint { display: block; text-align: center; font-size: 14px; color: var(--text-gray); padding: 10px 0 20px; margin-top: -10px; font-weight: 600; }
             
             section.ending-section { min-height: 25vh; padding-top: 40px; }
             .ending-text { font-size: clamp(24px, 6.5vw, 32px); letter-spacing: 2px; } 
 
-            /* ======== 移动端找回“查看大图”按钮，并采用极简深色毛玻璃材质，不突兀、不遮挡 ======== */
+            /* ======== 移动端查看大图：深色毛玻璃药丸按钮，不突兀不遮挡画面 ======== */
             .hover-overlay { 
                 opacity: 1; background: none; align-items: flex-end; justify-content: flex-end; 
                 padding: 12px; pointer-events: none; 
             }
             .view-detail-btn { 
-                background: rgba(0, 0, 0, 0.65); 
-                backdrop-filter: blur(5px);
-                -webkit-backdrop-filter: blur(5px);
-                color: rgba(255, 255, 255, 0.9); 
-                padding: 5px 12px; 
-                font-size: 11px; 
-                font-weight: 400; 
-                border: 1px solid rgba(255, 255, 255, 0.15);
-                border-radius: 20px;
-                pointer-events: auto;
+                background: rgba(0, 0, 0, 0.6); 
+                backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+                color: rgba(255, 255, 255, 0.95); 
+                padding: 6px 14px; font-size: 11px; font-weight: 500; 
+                border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 20px; 
+                pointer-events: auto; box-shadow: 0 4px 10px rgba(0,0,0,0.2);
             }
         }
     </style>
@@ -412,19 +375,19 @@
         <div class="swisse-wrapper">
             <div class="swisse-header"><p class="tag-line">LIFESTYLE & SOCIAL</p><h2 class="brand-h">斯维诗</h2></div>
             <div class="swisse-scroll-track" data-gallery="swisse">
-                <div class="swisse-card swisse-card-landscape">
+                <div class="swisse-card">
                     <div class="swisse-card-img"><img class="lazy-img" data-src="sws1.png"><div class="hover-overlay"><button class="view-detail-btn">查看大图</button></div></div>
                     <div class="swisse-card-text"><b>保健品=老登? NO!</b> 围绕时尚健康新叙事，借势三八节发起「万物皆可斯维诗」小红书全名共创，打破刻板印象。</div>
                 </div>
-                <div class="swisse-card swisse-card-portrait">
+                <div class="swisse-card">
                     <div class="swisse-card-img"><img class="lazy-img" data-src="sws2.png"><div class="hover-overlay"><button class="view-detail-btn">查看大图</button></div></div>
                     <div class="swisse-card-text">成功引领胶原水光瓶成为社交媒体“新时尚”，<b>实现从功能性向生活方式的强势破圈</b>。</div>
                 </div>
-                <div class="swisse-card swisse-card-landscape">
+                <div class="swisse-card">
                     <div class="swisse-card-img"><img class="lazy-img" data-src="dbf3.png"><div class="hover-overlay"><button class="view-detail-btn">查看大图</button></div></div>
                     <div class="swisse-card-text">切入时尚运动赛道，携手冲浪垂类圈层，<b>将蛋白粉打造成时尚运动圈层新宠</b>.</div>
                 </div>
-                <div class="swisse-card swisse-card-portrait">
+                <div class="swisse-card">
                     <div class="swisse-card-img"><img class="lazy-img" data-src="dbf4.png"><div class="hover-overlay"><button class="view-detail-btn">查看大图</button></div></div>
                     <div class="swisse-card-text">于三亚万宁落地「浪尖 S 俱乐部」快闪活动，以“强种草+天猫超市周年庆联动”驱动传播爆发，<b>达成总曝光 7700W+ 次</b>.</div>
                 </div>
@@ -652,15 +615,6 @@
                     const con = btn.closest('[data-gallery]');
                     const img = btn.closest('.carousel-slide, .swisse-card, .swisse-card-img').querySelector('img');
                     openLb(con.dataset.gallery, img.src || img.getAttribute('data-src'));
-                };
-            });
-            
-            document.querySelectorAll('.carousel-slide img, .swisse-card-img img').forEach(img => {
-                img.style.cursor = 'pointer';
-                img.onclick = (e) => {
-                    e.stopPropagation();
-                    const con = img.closest('[data-gallery]');
-                    if (con) openLb(con.dataset.gallery, img.src || img.getAttribute('data-src'));
                 };
             });
 
