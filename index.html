@@ -50,7 +50,6 @@
             border-radius: 20px; font-weight: bold; text-decoration: none; font-size: 14px;
         }
 
-        /* 纯白 + 半粗体高亮 */
         b, strong { color: var(--text-white); font-weight: 600; }
 
         section {
@@ -60,7 +59,7 @@
             background-color: var(--bg-black);
         }
         
-        /* 极简、通透的发光银线 */
+        /* 通透发光银线 */
         section:not(.hero)::before {
             content: ""; position: absolute; top: 0; left: 5%; width: 90%; height: 1px;
             background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.9) 50%, transparent 100%);
@@ -73,7 +72,7 @@
         }
 
         .content-grid, .hero-content { z-index: 1; position: relative; width: 100%; }
-        .hero { text-align: center; margin-bottom: 0; padding-bottom: 40px; }
+        .hero { text-align: center; }
         .hero-content { display: flex; flex-direction: column; align-items: center; justify-content: center; }
         .hello-title { font-size: clamp(40px, 8vw, 90px); font-weight: 800; color: var(--accent-yellow); margin-bottom: 20px; }
         .im-name { display: flex; align-items: center; justify-content: center; gap: 15px;
@@ -99,28 +98,27 @@
         
         .footer-text { font-size: 14px; color: var(--text-gray); border-top: 1px solid #222; padding-top: 12px; line-height: 1.4; }
 
-        /* ======== 轮播容器优化：完美包裹图片，消除巨大空隙 ======== */
+        /* ======== 轮播容器稳定性优化 ======== */
         .carousel-container {
             position: relative; width: 100%; height: auto; overflow: hidden; 
-            border-radius: 12px; background: transparent; box-shadow: none; 
+            border-radius: 12px; background: transparent; 
         }
         .carousel-slides { display: flex; width: 100%; height: auto; transition: transform 0.5s ease; align-items: center; }
         .carousel-slide { flex: 0 0 100%; position: relative; display: flex; justify-content: center; }
-        .carousel-slide img { width: 100%; height: auto; display: block; object-fit: contain; border-radius: 12px; }
+        .carousel-slide img { width: 100%; height: auto; max-height: 75vh; object-fit: contain; border-radius: 12px; display: block; }
 
         .hover-overlay {
             position: absolute; inset: 0; background: transparent; display: flex; align-items: center; justify-content: center;
-            opacity: 0; transition: opacity 0.3s; z-index: 20; pointer-events: none; border-radius: 12px;
+            opacity: 0; transition: opacity 0.3s; z-index: 20; pointer-events: none;
         }
         .carousel-slide:hover .hover-overlay, .swisse-card-img:hover .hover-overlay { opacity: 1; }
         
-        /* PC端黄色胶囊按钮 */
         .view-detail-btn { 
             background: var(--accent-yellow); color: black; padding: 10px 24px; border-radius: 30px;
             font-weight: 800; font-size: 14px; border: none; cursor: pointer; pointer-events: auto; 
         }
 
-        /* 绝对居中两侧的箭头，永不位移 */
+        /* 绝对居中箭头修复 */
         .carousel-btn {
             position: absolute; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.6); color: white; border: none;
             width: 40px; height: 40px; border-radius: 50%; cursor: pointer; z-index: 50;
@@ -132,22 +130,21 @@
         .dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,0.3); transition: background 0.3s; }
         .dot.active { background: var(--accent-yellow); width: 12px; border-radius: 3px; }
 
-        /* ======== 飘柔专属排版与胶囊UI ======== */
+        /* ======== 飘柔胶囊UI ======== */
         .stacked-layout { max-width: 1000px; width: 100%; margin: 0 auto; display: flex; flex-direction: column; gap: 40px; z-index: 1; position: relative;}
         .stacked-text { width: 100%; }
         
         .apple-gallery-wrapper { width: 100%; display: flex; flex-direction: column; align-items: center; }
         .apple-carousel-container {
             position: relative; width: 100%; height: auto; overflow: hidden; 
-            border-radius: 12px; background: transparent; box-shadow: none;
+            border-radius: 12px; background: transparent; 
         }
         
         .apple-pills-wrapper { width: 100%; display: flex; justify-content: center; margin-top: 15px; }
         .apple-pills { 
             display: inline-flex; align-items: center; background: #1C1C1E; 
-            padding: 4px; border-radius: 40px; 
-            max-width: 100%; overflow-x: auto; scrollbar-width: none;
-            box-shadow: inset 0 0 0 1px rgba(255,255,255,0.05); scroll-behavior: smooth; 
+            padding: 4px; border-radius: 40px; max-width: 100%; overflow-x: auto; 
+            scrollbar-width: none; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.05); scroll-behavior: smooth; 
         }
         .apple-pills::-webkit-scrollbar { display: none; }
         .apple-pills .pill { 
@@ -175,17 +172,17 @@
         }
         .apple-cta:hover .play-icon { transform: scale(1.1); }
 
-        /* ======== 斯维诗图文：完美对齐，锁定物理高度 ======== */
+        /* ======== 斯维诗图文对齐彻底修复（关键修改点） ======== */
         .swisse-wrapper { z-index: 1; position: relative; width: 100%; }
         .swisse-scroll-track {
             display: flex; gap: 30px; width: 100%; padding-bottom: 20px;
             overflow-x: auto; overflow-y: hidden; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch;
         }
-        .swisse-card { flex-shrink: 0; display: flex; flex-direction: column; gap: 15px; scroll-snap-align: start; width: max-content; }
-        /* 强制指定容器物理高度，横竖图视觉高度绝对一致 */
+        /* 强制卡片宽度等于内部图片宽度，防止文字突出去 */
+        .swisse-card { flex-shrink: 0; display: flex; flex-direction: column; gap: 15px; scroll-snap-align: start; width: min-content; }
         .swisse-card-img { height: 45vh; display: flex; position: relative; }
         .swisse-card-img img { height: 100%; width: auto; display: block; object-fit: contain; border-radius: 12px; }
-        .swisse-card-text { font-size: 15px; color: var(--text-gray); padding: 0 5px; text-align: justify; }
+        .swisse-card-text { font-size: 15px; color: var(--text-gray); padding: 0 5px; text-align: justify; word-break: break-all; }
 
         /* ======== 压轴收尾板块 ======== */
         section.ending-section {
@@ -227,15 +224,10 @@
             @keyframes breathe { 0%, 100% { opacity: 0.2; transform: translateY(0); } 50% { opacity: 1; transform: translateY(8px); } }
 
             .stacked-layout { gap: 25px; }
-            
             ul li { font-size: 15px; line-height: 1.6; }
             .apple-pills .pill { padding: 8px 18px; font-size: 14px; }
 
-            .apple-cta-wrapper { margin-top: 10px; height: 16px; } 
-            .apple-cta { font-size: 12px; }
-            .apple-cta .play-icon { width: 14px; height: 14px; font-size: 6px; margin-left: 4px; }
-
-            /* 移动端斯维诗：统一高度 40vh，宽度自适应，杜绝忽大忽小 */
+            /* 移动端斯维诗锁定 40vh */
             .swisse-card-img { height: 40vh; }
             .swisse-card-text { font-size: 15px !important; line-height: 1.6 !important; }
             .swisse-swipe-hint { display: block; text-align: center; font-size: 14px; color: var(--text-gray); padding: 10px 0 20px; margin-top: -10px; font-weight: 600; }
@@ -243,7 +235,7 @@
             section.ending-section { min-height: 25vh; padding-top: 40px; }
             .ending-text { font-size: clamp(24px, 6.5vw, 32px); letter-spacing: 2px; } 
 
-            /* ======== 移动端查看大图：深色毛玻璃药丸按钮，不突兀不遮挡画面 ======== */
+            /* 移动端毛玻璃查看大图按钮 */
             .hover-overlay { 
                 opacity: 1; background: none; align-items: flex-end; justify-content: flex-end; 
                 padding: 12px; pointer-events: none; 
@@ -475,10 +467,8 @@
                 if (!slides) return;
                 const total = slides.children.length;
                 const dotsCon = con.querySelector('.carousel-dots');
-                
                 let idx = 0;
                 let autoPlayTimer;
-
                 if (total <= 1) return;
                 if (dotsCon) {
                     for(let i=0; i<total; i++) {
@@ -491,16 +481,10 @@
                     slides.style.transform = `translateX(-${idx*100}%)`;
                     if (dotsCon) dotsCon.querySelectorAll('.dot').forEach((d,i) => d.className = i===idx?'dot active':'dot');
                 };
-
-                const startAutoPlay = () => {
-                    stopAutoPlay();
-                    autoPlayTimer = setInterval(() => { idx = (idx + 1) % total; update(); }, 4000); 
-                };
+                const startAutoPlay = () => { stopAutoPlay(); autoPlayTimer = setInterval(() => { idx = (idx + 1) % total; update(); }, 4000); };
                 const stopAutoPlay = () => clearInterval(autoPlayTimer);
-
                 con.querySelector('.prev')?.addEventListener('click', (e) => { e.stopPropagation(); idx=(idx-1+total)%total; update(); startAutoPlay(); });
                 con.querySelector('.next')?.addEventListener('click', (e) => { e.stopPropagation(); idx=(idx+1)%total; update(); startAutoPlay(); });
-                
                 let sX = 0;
                 con.addEventListener('touchstart', (e) => { sX = e.touches[0].clientX; stopAutoPlay(); }, {passive:true});
                 con.addEventListener('touchend', (e) => {
@@ -508,15 +492,8 @@
                     if(Math.abs(dX) > 50) { if(dX > 0) idx=(idx-1+total)%total; else idx=(idx+1)%total; update(); }
                     startAutoPlay();
                 });
-                
                 const observer = new IntersectionObserver((entries) => {
-                    entries.forEach(entry => {
-                        if (entry.isIntersecting) {
-                            startAutoPlay();
-                        } else {
-                            stopAutoPlay();
-                        }
-                    });
+                    entries.forEach(entry => { if (entry.isIntersecting) startAutoPlay(); else stopAutoPlay(); });
                 }, { threshold: 0.1 });
                 observer.observe(con);
             });
@@ -528,13 +505,10 @@
                 const total = slides.children.length;
                 const pillsWrapper = wrapper.querySelector('.apple-pills'); 
                 const pills = wrapper.querySelectorAll('.apple-pills .pill');
-                
                 const ctaWrapper = wrapper.querySelector('.apple-cta-wrapper');
                 const ctaLink = wrapper.querySelector('.apple-cta');
-
                 let idx = 0;
                 let autoPlayTimer;
-
                 const update = (isInit = false) => {
                     slides.style.transform = `translateX(-${idx * 100}%)`;
                     pills.forEach((pill, i) => {
@@ -544,53 +518,28 @@
                                 const scrollPos = pill.offsetLeft - (pillsWrapper.clientWidth / 2) + (pill.clientWidth / 2);
                                 pillsWrapper.scrollLeft = scrollPos;
                             }
-                            
                             if (ctaWrapper && ctaLink) {
                                 const videoUrl = pill.getAttribute('data-video');
-                                if (videoUrl) {
-                                    ctaLink.href = videoUrl;
-                                    ctaWrapper.classList.add('visible');
-                                } else {
-                                    ctaWrapper.classList.remove('visible');
-                                }
+                                if (videoUrl) { ctaLink.href = videoUrl; ctaWrapper.classList.add('visible'); } else { ctaWrapper.classList.remove('visible'); }
                             }
                         }
                     });
                 };
-
-                const startAutoPlay = () => {
-                    stopAutoPlay();
-                    autoPlayTimer = setInterval(() => { idx = (idx + 1) % total; update(); }, 4500); 
-                };
+                const startAutoPlay = () => { stopAutoPlay(); autoPlayTimer = setInterval(() => { idx = (idx + 1) % total; update(); }, 4500); };
                 const stopAutoPlay = () => clearInterval(autoPlayTimer);
-
-                pills.forEach((pill, i) => {
-                    pill.addEventListener('click', () => { idx = i; update(); startAutoPlay(); });
-                });
+                pills.forEach((pill, i) => { pill.addEventListener('click', () => { idx = i; update(); startAutoPlay(); }); });
                 let sX = 0;
                 const con = wrapper.querySelector('.apple-carousel-container');
                 con.addEventListener('touchstart', (e) => { sX = e.touches[0].clientX; stopAutoPlay(); }, {passive:true});
                 con.addEventListener('touchend', (e) => {
                     let dX = e.changedTouches[0].clientX - sX;
-                    if(Math.abs(dX) > 50) {
-                        if(dX > 0) idx = (idx - 1 + total) % total;
-                        else idx = (idx + 1) % total;
-                        update();
-                    }
+                    if(Math.abs(dX) > 50) { if(dX > 0) idx = (idx - 1 + total) % total; else idx = (idx + 1) % total; update(); }
                     startAutoPlay();
                 });
-
                 const observer = new IntersectionObserver((entries) => {
-                    entries.forEach(entry => {
-                        if (entry.isIntersecting) {
-                            startAutoPlay();
-                        } else {
-                            stopAutoPlay();
-                        }
-                    });
+                    entries.forEach(entry => { if (entry.isIntersecting) startAutoPlay(); else stopAutoPlay(); });
                 }, { threshold: 0.1 });
                 observer.observe(wrapper);
-
                 update(true); 
             });
         }
@@ -600,7 +549,7 @@
             const lbImg = document.getElementById('lbImg');
             let currentImgs = []; let currentIdx = 0;
             const openLb = (galleryId, startSrc) => {
-                const container = document.querySelector(`[data-gallery="${galleryId}"]`);
+                const container = document.querySelector(`[data-gallery=\"${galleryId}\"]`);
                 currentImgs = Array.from(container.querySelectorAll('img')).map(i => i.src || i.getAttribute('data-src'));
                 currentIdx = currentImgs.indexOf(startSrc);
                 if (currentIdx === -1) currentIdx = 0; 
@@ -608,7 +557,6 @@
                 lb.classList.add('active');
                 document.body.style.overflow = 'hidden';
             };
-            
             document.querySelectorAll('.view-detail-btn').forEach(btn => {
                 btn.onclick = (e) => {
                     e.stopPropagation();
@@ -617,11 +565,15 @@
                     openLb(con.dataset.gallery, img.src || img.getAttribute('data-src'));
                 };
             });
-
-            const show = (dir) => {
-                currentIdx = (currentIdx + dir + currentImgs.length) % currentImgs.length;
-                lbImg.src = currentImgs[currentIdx];
-            };
+            document.querySelectorAll('.carousel-slide img, .swisse-card-img img').forEach(img => {
+                img.style.cursor = 'pointer';
+                img.onclick = (e) => {
+                    e.stopPropagation();
+                    const con = img.closest('[data-gallery]');
+                    if (con) openLb(con.dataset.gallery, img.src || img.getAttribute('data-src'));
+                };
+            });
+            const show = (dir) => { currentIdx = (currentIdx + dir + currentImgs.length) % currentImgs.length; lbImg.src = currentImgs[currentIdx]; };
             document.getElementById('lbPrev').onclick = (e) => { e.stopPropagation(); show(-1); };
             document.getElementById('lbNext').onclick = (e) => { e.stopPropagation(); show(1); };
             document.getElementById('lbClose').onclick = () => { lb.classList.remove('active'); document.body.style.overflow=''; };
@@ -632,13 +584,10 @@
             const canvas = document.createElement('canvas');
             canvas.width = 320; canvas.height = 200;
             const ctx = canvas.getContext('2d');
-            ctx.fillStyle = 'rgba(255, 255, 255, 0.05)'; 
-            ctx.font = '16px sans-serif';
-            ctx.rotate(-20 * Math.PI / 180);
-            ctx.fillText(text, 20, 100);
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.05)'; ctx.font = '16px sans-serif';
+            ctx.rotate(-20 * Math.PI / 180); ctx.fillText(text, 20, 100);
             const div = document.createElement('div');
-            div.style.position = 'fixed'; div.style.top = '0';
-            div.style.left = '0';
+            div.style.position = 'fixed'; div.style.top = '0'; div.style.left = '0';
             div.style.width = '100vw'; div.style.height = '100vh';
             div.style.pointerEvents = 'none'; div.style.zIndex = '9998'; 
             div.style.backgroundImage = `url(${canvas.toDataURL('image/png')})`;
@@ -648,7 +597,6 @@
         window.addEventListener('load', () => {
             setTimeout(() => window.scrollTo(0, 0), 10);
             setTimeout(() => window.scrollTo(0, 0), 150);
-            
             try {
                 if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
                     gsap.registerPlugin(ScrollTrigger);
@@ -659,14 +607,8 @@
                         });
                     });
                 }
-            } catch (error) {
-                console.warn("外部动画库加载被拦截，已自动启动备用显示方案");
-            }
-
-            initLazyLoad(); 
-            initCarousels(); 
-            initAppleCarousels(); 
-            initGalleryLightbox();
+            } catch (error) {}
+            initLazyLoad(); initCarousels(); initAppleCarousels(); initGalleryLightbox();
             createWatermark('Sukie作品，严禁外传');
             document.addEventListener('contextmenu', e => e.preventDefault());
         });
