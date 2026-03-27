@@ -107,8 +107,10 @@
         .carousel-slide { flex: 0 0 100%; position: relative; display: flex; justify-content: center; }
         .carousel-slide img { width: 100%; height: auto; max-height: 75vh; object-fit: contain; border-radius: 12px; display: block; }
 
+        /* ======== 核心修复：PC端悬浮按钮放至右下角 ======== */
         .hover-overlay {
-            position: absolute; inset: 0; background: transparent; display: flex; align-items: center; justify-content: center;
+            position: absolute; inset: 0; background: transparent; display: flex; 
+            align-items: flex-end; justify-content: flex-end; padding: 24px; /* 调整为右下角对齐并留出呼吸边距 */
             opacity: 0; transition: opacity 0.3s; z-index: 20; pointer-events: none;
         }
         .carousel-slide:hover .hover-overlay, .swisse-card-img:hover .hover-overlay { opacity: 1; }
@@ -118,7 +120,7 @@
             font-weight: 800; font-size: 14px; border: none; cursor: pointer; pointer-events: auto; 
         }
 
-        /* 绝对居中箭头修复 */
+        /* 绝对居中两侧的箭头，永不位移 */
         .carousel-btn {
             position: absolute; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.6); color: white; border: none;
             width: 40px; height: 40px; border-radius: 50%; cursor: pointer; z-index: 50;
@@ -137,7 +139,7 @@
         .apple-gallery-wrapper { width: 100%; display: flex; flex-direction: column; align-items: center; }
         .apple-carousel-container {
             position: relative; width: 100%; height: auto; overflow: hidden; 
-            border-radius: 12px; background: transparent; 
+            border-radius: 12px; background: transparent; box-shadow: none;
         }
         
         .apple-pills-wrapper { width: 100%; display: flex; justify-content: center; margin-top: 15px; }
@@ -172,13 +174,12 @@
         }
         .apple-cta:hover .play-icon { transform: scale(1.1); }
 
-        /* ======== 斯维诗图文对齐彻底修复（关键修改点） ======== */
+        /* ======== 斯维诗图文对齐彻底修复 ======== */
         .swisse-wrapper { z-index: 1; position: relative; width: 100%; }
         .swisse-scroll-track {
             display: flex; gap: 30px; width: 100%; padding-bottom: 20px;
             overflow-x: auto; overflow-y: hidden; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch;
         }
-        /* 强制卡片宽度等于内部图片宽度，防止文字突出去 */
         .swisse-card { flex-shrink: 0; display: flex; flex-direction: column; gap: 15px; scroll-snap-align: start; width: min-content; }
         .swisse-card-img { height: 45vh; display: flex; position: relative; }
         .swisse-card-img img { height: 100%; width: auto; display: block; object-fit: contain; border-radius: 12px; }
@@ -205,10 +206,9 @@
         .lb-nav.next { right: 15px; }
         .lightbox-img { max-width: 90%; max-height: 85vh; object-fit: contain; }
 
-        .lazy-img { filter: blur(5px); transition: filter 0.4s ease-out; }
-        .lazy-img.loaded { filter: blur(0); }
         .swisse-swipe-hint { display: none; }
 
+        /* ================= 移动端绝对锁定区（绝不修改一丝一毫） ================= */
         @media (max-width: 1024px) {
             section { min-height: auto; padding: 80px 6% 60px; }
             .hero { min-height: 85vh; margin-bottom: 0; padding-bottom: 20px; display: flex; align-items: center; }
@@ -226,6 +226,10 @@
             .stacked-layout { gap: 25px; }
             ul li { font-size: 15px; line-height: 1.6; }
             .apple-pills .pill { padding: 8px 18px; font-size: 14px; }
+
+            .apple-cta-wrapper { margin-top: 10px; height: 16px; } 
+            .apple-cta { font-size: 12px; }
+            .apple-cta .play-icon { width: 14px; height: 14px; font-size: 6px; margin-left: 4px; }
 
             /* 移动端斯维诗锁定 40vh */
             .swisse-card-img { height: 40vh; }
@@ -287,8 +291,8 @@
             </div>
             <div class="carousel-container" data-gallery="pg-1">
                 <div class="carousel-slides">
-                    <div class="carousel-slide"><img class="lazy-img" data-src="pr1.png"><div class="hover-overlay"><button class="view-detail-btn">查看大图</button></div></div>
-                    <div class="carousel-slide"><img class="lazy-img" data-src="pr2.png"><div class="hover-overlay"><button class="view-detail-btn">查看大图</button></div></div>
+                    <div class="carousel-slide"><img src="pr1.png" loading="lazy"><div class="hover-overlay"><button class="view-detail-btn">查看大图</button></div></div>
+                    <div class="carousel-slide"><img src="pr2.png" loading="lazy"><div class="hover-overlay"><button class="view-detail-btn">查看大图</button></div></div>
                 </div>
                 <button class="carousel-btn prev">◀</button><button class="carousel-btn next">▶</button>
                 <div class="carousel-dots"></div>
@@ -302,10 +306,10 @@
             <div class="apple-gallery-wrapper">
                 <div class="apple-carousel-container" data-gallery="pg-2">
                     <div class="carousel-slides">
-                        <div class="carousel-slide"><img class="lazy-img" data-src="pr3.png"><div class="hover-overlay"><button class="view-detail-btn">查看大图</button></div></div>
-                        <div class="carousel-slide"><img class="lazy-img" data-src="pr4.png"><div class="hover-overlay"><button class="view-detail-btn">查看大图</button></div></div>
-                        <div class="carousel-slide"><img class="lazy-img" data-src="pr5.png"><div class="hover-overlay"><button class="view-detail-btn">查看大图</button></div></div>
-                        <div class="carousel-slide"><img class="lazy-img" data-src="pr7.jpg"><div class="hover-overlay"><button class="view-detail-btn">查看大图</button></div></div>
+                        <div class="carousel-slide"><img src="pr3.png" loading="lazy"><div class="hover-overlay"><button class="view-detail-btn">查看大图</button></div></div>
+                        <div class="carousel-slide"><img src="pr4.png" loading="lazy"><div class="hover-overlay"><button class="view-detail-btn">查看大图</button></div></div>
+                        <div class="carousel-slide"><img src="pr5.png" loading="lazy"><div class="hover-overlay"><button class="view-detail-btn">查看大图</button></div></div>
+                        <div class="carousel-slide"><img src="pr7.jpg" loading="lazy"><div class="hover-overlay"><button class="view-detail-btn">查看大图</button></div></div>
                     </div>
                 </div>
                 <div class="apple-pills-wrapper">
@@ -331,8 +335,8 @@
             <div class="apple-gallery-wrapper">
                 <div class="apple-carousel-container" data-gallery="pg-3">
                     <div class="carousel-slides">
-                        <div class="carousel-slide"><img class="lazy-img" data-src="pr6.png"><div class="hover-overlay"><button class="view-detail-btn">查看大图</button></div></div>
-                        <div class="carousel-slide"><img class="lazy-img" data-src="pr8.jpg"><div class="hover-overlay"><button class="view-detail-btn">查看大图</button></div></div>
+                        <div class="carousel-slide"><img src="pr6.png" loading="lazy"><div class="hover-overlay"><button class="view-detail-btn">查看大图</button></div></div>
+                        <div class="carousel-slide"><img src="pr8.jpg" loading="lazy"><div class="hover-overlay"><button class="view-detail-btn">查看大图</button></div></div>
                     </div>
                 </div>
                 <div class="apple-pills-wrapper">
@@ -353,8 +357,8 @@
             </div>
             <div class="carousel-container" data-gallery="pg-4">
                 <div class="carousel-slides">
-                    <div class="carousel-slide"><img class="lazy-img" data-src="pg1.png"><div class="hover-overlay"><button class="view-detail-btn">查看大图</button></div></div>
-                    <div class="carousel-slide"><img class="lazy-img" data-src="pg2.png"><div class="hover-overlay"><button class="view-detail-btn">查看大图</button></div></div>
+                    <div class="carousel-slide"><img src="pg1.png" loading="lazy"><div class="hover-overlay"><button class="view-detail-btn">查看大图</button></div></div>
+                    <div class="carousel-slide"><img src="pg2.png" loading="lazy"><div class="hover-overlay"><button class="view-detail-btn">查看大图</button></div></div>
                 </div>
                 <button class="carousel-btn prev">◀</button><button class="carousel-btn next">▶</button>
                 <div class="carousel-dots"></div>
@@ -368,19 +372,19 @@
             <div class="swisse-header"><p class="tag-line">LIFESTYLE & SOCIAL</p><h2 class="brand-h">斯维诗</h2></div>
             <div class="swisse-scroll-track" data-gallery="swisse">
                 <div class="swisse-card">
-                    <div class="swisse-card-img"><img class="lazy-img" data-src="sws1.png"><div class="hover-overlay"><button class="view-detail-btn">查看大图</button></div></div>
+                    <div class="swisse-card-img"><img src="sws1.png" loading="lazy"><div class="hover-overlay"><button class="view-detail-btn">查看大图</button></div></div>
                     <div class="swisse-card-text"><b>保健品=老登? NO!</b> 围绕时尚健康新叙事，借势三八节发起「万物皆可斯维诗」小红书全名共创，打破刻板印象。</div>
                 </div>
                 <div class="swisse-card">
-                    <div class="swisse-card-img"><img class="lazy-img" data-src="sws2.png"><div class="hover-overlay"><button class="view-detail-btn">查看大图</button></div></div>
+                    <div class="swisse-card-img"><img src="sws2.png" loading="lazy"><div class="hover-overlay"><button class="view-detail-btn">查看大图</button></div></div>
                     <div class="swisse-card-text">成功引领胶原水光瓶成为社交媒体“新时尚”，<b>实现从功能性向生活方式的强势破圈</b>。</div>
                 </div>
                 <div class="swisse-card">
-                    <div class="swisse-card-img"><img class="lazy-img" data-src="dbf3.png"><div class="hover-overlay"><button class="view-detail-btn">查看大图</button></div></div>
+                    <div class="swisse-card-img"><img src="dbf3.png" loading="lazy"><div class="hover-overlay"><button class="view-detail-btn">查看大图</button></div></div>
                     <div class="swisse-card-text">切入时尚运动赛道，携手冲浪垂类圈层，<b>将蛋白粉打造成时尚运动圈层新宠</b>.</div>
                 </div>
                 <div class="swisse-card">
-                    <div class="swisse-card-img"><img class="lazy-img" data-src="dbf4.png"><div class="hover-overlay"><button class="view-detail-btn">查看大图</button></div></div>
+                    <div class="swisse-card-img"><img src="dbf4.png" loading="lazy"><div class="hover-overlay"><button class="view-detail-btn">查看大图</button></div></div>
                     <div class="swisse-card-text">于三亚万宁落地「浪尖 S 俱乐部」快闪活动，以“强种草+天猫超市周年庆联动”驱动传播爆发，<b>达成总曝光 7700W+ 次</b>.</div>
                 </div>
             </div>
@@ -400,9 +404,9 @@
             </div>
             <div class="carousel-container" data-gallery="biostime">
                 <div class="carousel-slides">
-                    <div class="carousel-slide"><img class="lazy-img" data-src="hsy1.png"><div class="hover-overlay"><button class="view-detail-btn">查看大图</button></div></div>
-                    <div class="carousel-slide"><img class="lazy-img" data-src="hsy2.png"><div class="hover-overlay"><button class="view-detail-btn">查看大图</button></div></div>
-                    <div class="carousel-slide"><img class="lazy-img" data-src="hsy3.jpg"><div class="hover-overlay"><button class="view-detail-btn">查看大图</button></div></div>
+                    <div class="carousel-slide"><img src="hsy1.png" loading="lazy"><div class="hover-overlay"><button class="view-detail-btn">查看大图</button></div></div>
+                    <div class="carousel-slide"><img src="hsy2.png" loading="lazy"><div class="hover-overlay"><button class="view-detail-btn">查看大图</button></div></div>
+                    <div class="carousel-slide"><img src="hsy3.jpg" loading="lazy"><div class="hover-overlay"><button class="view-detail-btn">查看大图</button></div></div>
                 </div>
                 <button class="carousel-btn prev">◀</button><button class="carousel-btn next">▶</button>
                 <div class="carousel-dots"></div>
@@ -414,7 +418,7 @@
         <div class="content-grid img-left">
             <div class="carousel-container" data-gallery="nongfu">
                 <div class="carousel-slides">
-                    <div class="carousel-slide"><img class="lazy-img" data-src="nfsq.png"><div class="hover-overlay"><button class="view-detail-btn">查看大图</button></div></div>
+                    <div class="carousel-slide"><img src="nfsq.png" loading="lazy"><div class="hover-overlay"><button class="view-detail-btn">查看大图</button></div></div>
                 </div>
             </div>
             <div class="project-text">
@@ -442,25 +446,6 @@
     </div>
 
     <script>
-        function initLazyLoad() {
-            const obs = new IntersectionObserver((entries) => {
-                entries.forEach(en => {
-                    if(en.isIntersecting) {
-                        const img = en.target;
-                        const realSrc = img.getAttribute('data-src');
-                        if (realSrc) {
-                            img.src = realSrc;
-                            img.onload = () => img.classList.add('loaded');
-                            img.onerror = () => img.classList.add('loaded');
-                            setTimeout(() => img.classList.add('loaded'), 3000);
-                        }
-                        obs.unobserve(img);
-                    }
-                });
-            }, {rootMargin: "600px"});
-            document.querySelectorAll('.lazy-img').forEach(img => obs.observe(img));
-        }
-
         function initCarousels() {
             document.querySelectorAll('.carousel-container').forEach(con => {
                 const slides = con.querySelector('.carousel-slides');
@@ -550,9 +535,12 @@
             let currentImgs = []; let currentIdx = 0;
             const openLb = (galleryId, startSrc) => {
                 const container = document.querySelector(`[data-gallery=\"${galleryId}\"]`);
-                currentImgs = Array.from(container.querySelectorAll('img')).map(i => i.src || i.getAttribute('data-src'));
-                currentIdx = currentImgs.indexOf(startSrc);
+                currentImgs = Array.from(container.querySelectorAll('img')).map(i => i.src);
+                
+                const absStartSrc = new URL(startSrc, document.baseURI).href;
+                currentIdx = currentImgs.findIndex(src => src === absStartSrc);
                 if (currentIdx === -1) currentIdx = 0; 
+                
                 lbImg.src = currentImgs[currentIdx];
                 lb.classList.add('active');
                 document.body.style.overflow = 'hidden';
@@ -562,7 +550,7 @@
                     e.stopPropagation();
                     const con = btn.closest('[data-gallery]');
                     const img = btn.closest('.carousel-slide, .swisse-card, .swisse-card-img').querySelector('img');
-                    openLb(con.dataset.gallery, img.src || img.getAttribute('data-src'));
+                    openLb(con.dataset.gallery, img.getAttribute('src'));
                 };
             });
             document.querySelectorAll('.carousel-slide img, .swisse-card-img img').forEach(img => {
@@ -570,7 +558,7 @@
                 img.onclick = (e) => {
                     e.stopPropagation();
                     const con = img.closest('[data-gallery]');
-                    if (con) openLb(con.dataset.gallery, img.src || img.getAttribute('data-src'));
+                    if (con) openLb(con.dataset.gallery, img.getAttribute('src'));
                 };
             });
             const show = (dir) => { currentIdx = (currentIdx + dir + currentImgs.length) % currentImgs.length; lbImg.src = currentImgs[currentIdx]; };
@@ -608,7 +596,7 @@
                     });
                 }
             } catch (error) {}
-            initLazyLoad(); initCarousels(); initAppleCarousels(); initGalleryLightbox();
+            initCarousels(); initAppleCarousels(); initGalleryLightbox();
             createWatermark('Sukie作品，严禁外传');
             document.addEventListener('contextmenu', e => e.preventDefault());
         });
