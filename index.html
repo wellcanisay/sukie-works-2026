@@ -30,42 +30,78 @@
         img { -webkit-user-drag: none; user-drag: none; pointer-events: auto; }
 
         nav {
-            position: fixed; top: 0; width: 100%; height: 60px;
+            position: fixed;
+            top: 0; width: 100%; height: 60px;
             display: flex; justify-content: space-between; align-items: center;
             padding: 0 5%; z-index: 1000;
-            background: rgba(0,0,0,0.8); backdrop-filter: blur(10px);
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(10px);
         }
         .logo { font-weight: 800; font-size: 18px; }
         .btn-touch { 
-            background: var(--accent-yellow); color: black; padding: 6px 15px; 
-            border-radius: 20px; font-weight: bold; text-decoration: none; font-size: 12px;
+            background: var(--accent-yellow);
+            color: black; padding: 8px 18px; 
+            border-radius: 20px; font-weight: bold; text-decoration: none; font-size: 14px;
         }
 
+        /* 苹果风文字高亮效果：纯白 + 半粗体 */
+        b, strong {
+            color: var(--text-white);
+            font-weight: 600;
+        }
+
+        /* 简化的银白精密发光分割线，高光明显 */
         section {
-            min-height: 100vh; width: 100%; display: flex; align-items: center; justify-content: center;
-            padding: 80px 8% 40px; border-bottom: 1px solid #111; position: relative; overflow: hidden;
+            min-height: 100vh;
+            width: 100%; display: flex; align-items: center; justify-content: center;
+            padding: 100px 8% 80px; position: relative; overflow: hidden;
+            background-color: var(--bg-black);
+        }
+        
+        section:not(.hero)::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 5%; /* 居中，两端留白 */
+            width: 90%;
+            height: 1px;
+            /* 极简银白径向渐变，中心亮，两端淡出 */
+            background: radial-gradient(circle at center, rgba(255,255,255,1) 0%, rgba(255,255,255,0.5) 50%, transparent 100%);
+            /* 双重阴影叠加：核心高亮 + 弥散银灰色光晕，使发光明显且高级 */
+            box-shadow: 
+                0 0 10px 1px rgba(255, 255, 255, 0.8), 
+                0 0 25px 4px rgba(200, 200, 205, 0.5); 
+            opacity: 0.9;
+            z-index: 2;
         }
 
         .content-grid, .hero-content { z-index: 1; position: relative; width: 100%; }
-        .hero { text-align: center; margin-bottom: 80px; padding-bottom: 40px; }
+        .hero { text-align: center; margin-bottom: 0; padding-bottom: 40px; }
         .hero-content { display: flex; flex-direction: column; align-items: center; justify-content: center; }
         .hello-title { font-size: clamp(40px, 8vw, 90px); font-weight: 800; color: var(--accent-yellow); margin-bottom: 20px; }
-        .im-name { display: flex; align-items: center; justify-content: center; gap: 15px; font-size: clamp(28px, 5vw, 70px); font-weight: 800; margin-bottom: 30px; flex-wrap: wrap; }
-        .avatar-box { width: clamp(70px, 9vw, 100px); height: clamp(70px, 9vw, 100px); background: #2D2D2D; border-radius: 24px; overflow: hidden; border: 2px solid #444; }
+        .im-name { display: flex; align-items: center; justify-content: center; gap: 15px;
+            font-size: clamp(28px, 5vw, 70px); font-weight: 800; margin-bottom: 30px; flex-wrap: wrap;
+        }
+        .avatar-box { width: clamp(70px, 9vw, 100px); height: clamp(70px, 9vw, 100px); background: #2D2D2D;
+            border-radius: 24px; overflow: hidden; border: 2px solid #444; }
         .avatar-box img { width: 100%; height: 100%; object-fit: cover; }
         .hero-desc { max-width: 600px; font-size: 16px; color: var(--text-gray); margin: 0 auto; line-height: 1.6; }
+
+        /* 滑动指示器默认在PC端隐藏，移动端显示 */
+        .scroll-down-indicator { display: none; }
 
         .content-grid { display: grid; grid-template-columns: 0.9fr 1.4fr; gap: 40px; align-items: center; max-width: 1400px; }
         .content-grid.img-left { grid-template-columns: 1.4fr 0.9fr; }
 
         .brand-h { font-size: clamp(20px, 2.5vw, 32px); font-weight: 800; margin-bottom: 12px; }
-        .sub-h { font-size: 15px; font-weight: 600; margin-bottom: 15px; display: block; }
+        .sub-h { font-size: 16px; font-weight: 600; margin-bottom: 15px; display: block; }
         
         ul { list-style: none; }
-        ul li { position: relative; padding-left: 18px; margin-bottom: 8px; font-size: 13px; color: var(--text-gray); text-align: justify; list-style: none; line-height: 1.4; }
+        ul li { position: relative; padding-left: 18px; margin-bottom: 10px; font-size: 15px;
+            color: var(--text-gray); text-align: justify; list-style: none; line-height: 1.6; }
         ul li::before { content: "•"; position: absolute; left: 0; color: var(--highlight-orange); font-weight: bold; }
         
-        .footer-text { font-size: 12px; color: var(--text-gray); border-top: 1px solid #222; padding-top: 12px; line-height: 1.4; }
+        .footer-text { font-size: 14px; color: var(--text-gray); border-top: 1px solid #222; padding-top: 12px; line-height: 1.4; }
 
         .carousel-container {
             position: relative; width: 100%; height: 70vh; overflow: hidden; 
@@ -73,19 +109,21 @@
             background: #111; box-shadow: 0 20px 50px rgba(0,0,0,0.5);
         }
         .carousel-slides { display: flex; width: 100%; height: 100%; transition: transform 0.5s ease; }
-        .carousel-slide { flex: 0 0 100%; position: relative; background: #000; }
-        .carousel-slide img { width: 100%; height: 100%; object-fit: contain; }
+        .carousel-slide { flex: 0 0 100%; position: relative; background: transparent; }
+        .carousel-slide img { width: 100%; height: 100%; object-fit: cover; }
 
         .hover-overlay {
             position: absolute; inset: 0; background: rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center;
             opacity: 0; transition: opacity 0.3s; z-index: 20;
         }
         .carousel-slide:hover .hover-overlay, .swisse-card-img:hover .hover-overlay { opacity: 1; }
-        .view-detail-btn { background: var(--accent-yellow); color: black; padding: 10px 24px; border-radius: 30px; font-weight: 800; font-size: 13px; border: none; cursor: pointer; }
+        .view-detail-btn { background: var(--accent-yellow); color: black; padding: 10px 24px; border-radius: 30px;
+            font-weight: 800; font-size: 14px; border: none; cursor: pointer; }
 
         .carousel-btn {
             position: absolute; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.6); color: white; border: none;
-            width: 40px; height: 40px; border-radius: 50%; cursor: pointer; z-index: 50; display: flex; align-items: center; justify-content: center;
+            width: 40px; height: 40px; border-radius: 50%; cursor: pointer; z-index: 50;
+            display: flex; align-items: center; justify-content: center;
         }
         .carousel-btn.prev { left: 10px; }
         .carousel-btn.next { right: 10px; }
@@ -111,29 +149,82 @@
             padding: 4px; border-radius: 40px; 
             max-width: 100%; overflow-x: auto; scrollbar-width: none;
             box-shadow: inset 0 0 0 1px rgba(255,255,255,0.05);
+            /* 配合JS的scrollLeft实现顺滑滚动，彻底避免触发WebView全局页面跳动 */
+            scroll-behavior: smooth; 
         }
         .apple-pills::-webkit-scrollbar { display: none; }
         .apple-pills .pill { 
             background: transparent; color: #A1A1A6; border: none; 
-            padding: 8px 24px; border-radius: 40px; font-size: 13px; font-weight: 600; 
+            padding: 8px 24px; border-radius: 40px; font-size: 14px; font-weight: 600; 
             cursor: pointer; transition: all 0.3s cubic-bezier(0.25, 0.1, 0.25, 1); 
             white-space: nowrap; flex-shrink: 0;
         }
-        .apple-pills .pill.active { 
-            background: #FFFFFF; color: #000000; box-shadow: 0 2px 8px rgba(0,0,0,0.2); 
+        .apple-pills .pill.active { background: #FFFFFF; color: #000000; box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
+
+        /* ======== 观看影片按钮（Apple细粒度优化设计） ======== */
+        .apple-cta-wrapper {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            height: 18px; /* 缩小高度，减小隐藏时的占位空白 */
+            margin-top: 12px; /* 缩小间距，不出现时不突兀 */
+            opacity: 0; /* 默认隐藏 */
+            pointer-events: none; /* 隐藏时禁止点击 */
+            transition: opacity 0.3s ease-in-out;
         }
+        .apple-cta-wrapper.visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .apple-cta {
+            color: #0071E3; 
+            font-size: 13px; /* 缩小字号，对齐Apple极简风格 */
+            text-decoration: none; 
+            display: inline-flex;
+            align-items: center;
+            font-weight: 500; /* 减弱字重 */
+            border-bottom: 1px solid #0071E3; /* 极细下划线 */
+            padding-bottom: 1px;
+            transition: all 0.2s ease-in-out;
+            line-height: 1; 
+        }
+        .apple-cta:hover { opacity: 0.8; transform: translateY(-1px); }
+        .apple-cta .play-icon {
+            width: 16px; height: 16px; /* 缩小播放图标 */
+            border-radius: 50%;
+            border: 1px solid #0071E3;
+            display: inline-flex; justify-content: center; align-items: center;
+            font-size: 7px; margin-left: 5px; color: #0071E3; transition: transform 0.2s;
+        }
+        .apple-cta:hover .play-icon { transform: scale(1.1); }
 
         .swisse-wrapper { z-index: 1; position: relative; width: 100%; }
         .swisse-scroll-track {
             display: flex; gap: 30px; width: 100%; padding-bottom: 20px;
-            overflow-x: auto; overflow-y: hidden; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; 
+            overflow-x: auto; overflow-y: hidden; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch;
         }
         .swisse-card { flex-shrink: 0; display: flex; flex-direction: column; gap: 15px; scroll-snap-align: start; }
         .swisse-card-landscape { width: calc(45vh * 16 / 9); }
         .swisse-card-portrait { width: calc(45vh * 3 / 4); }
         .swisse-card-img { width: 100%; height: 45vh; border-radius: 24px; overflow: hidden; position: relative; background: #111; }
         .swisse-card-img img { width: 100%; height: 100%; object-fit: cover; }
-        .swisse-card-text { font-size: 14px; color: var(--text-gray); padding: 0 5px; text-align: justify; }
+        .swisse-card-text { font-size: 15px; color: var(--text-gray); padding: 0 5px; text-align: justify; }
+
+        /* ======== 压轴收尾板块 (Apple风格) ======== */
+        section.ending-section {
+            min-height: 35vh; /* Apple 式留白呼吸感，比之前略微降低不显得空荡 */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 8%;
+        }
+        .ending-text {
+            font-size: clamp(24px, 4vw, 32px); /* 严格对齐“往下全是战绩”的视觉量级 */
+            font-weight: 700;
+            color: var(--text-white);
+            letter-spacing: 2px;
+            text-align: center;
+        }
 
         .lightbox-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95);
@@ -141,8 +232,12 @@
         }
         .lightbox-overlay.active { display: flex; opacity: 1; }
         .lightbox-content { position: relative; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; }
-        .lb-close { position: absolute; top: 20px; right: 20px; color: white; font-size: 35px; background: none; border: none; cursor: pointer; z-index: 10010; }
-        .lb-nav { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.1); color: white; border: none; width: 50px; height: 50px; border-radius: 50%; font-size: 24px; cursor: pointer; z-index: 10010; }
+        .lb-close { position: absolute; top: 20px; right: 20px; color: white;
+            font-size: 35px; background: none; border: none; cursor: pointer; z-index: 10010;
+        }
+        .lb-nav { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.1); color: white;
+            border: none; width: 50px; height: 50px; border-radius: 50%; font-size: 24px; cursor: pointer; z-index: 10010;
+        }
         .lb-nav.prev { left: 15px; }
         .lb-nav.next { right: 15px; }
         .lightbox-img { max-width: 90%; max-height: 85vh; object-fit: contain; }
@@ -153,13 +248,54 @@
 
         @media (max-width: 1024px) {
             section { min-height: auto; padding: 80px 6% 60px; }
-            .hero { margin-bottom: 80px; padding-bottom: 40px; }
+            .hero { 
+                min-height: 85vh; 
+                margin-bottom: 0; 
+                padding-bottom: 20px;
+                display: flex;
+                align-items: center;
+            }
             .content-grid { display: flex; flex-direction: column; gap: 20px; }
             .content-grid.img-left { flex-direction: column-reverse; }
             
+            /* 移动端下滑指示器大字号及平缓动画 */
+            .scroll-down-indicator {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 15px;
+                margin-top: 5vh;
+                animation: breathe 3s infinite ease-in-out; /* 调慢跳动频率，更有呼吸感 */
+            }
+            .scroll-down-indicator .text {
+                font-size: clamp(24px, 6.5vw, 32px); /* 大字号回归 */
+                color: #F5F5F7; 
+                font-weight: 700;
+                letter-spacing: 2px;
+            }
+            .scroll-down-indicator .arrow {
+                width: 16px;
+                height: 16px;
+                border-right: 3px solid #F5F5F7;
+                border-bottom: 3px solid #F5F5F7;
+                transform: rotate(45deg);
+            }
+            @keyframes breathe {
+                0%, 100% { opacity: 0.2; transform: translateY(0); }
+                50% { opacity: 1; transform: translateY(8px); }
+            }
+
             .stacked-layout { gap: 25px; }
             .stacked-layout .carousel-container, .apple-carousel-container { height: 35vh; }
-            .apple-pills .pill { padding: 6px 16px; font-size: 12px; }
+            
+            /* 全面提升移动端小字体的大小，增强易读性 */
+            ul li { font-size: 15px; line-height: 1.6; }
+            .apple-pills .pill { padding: 8px 18px; font-size: 14px; }
+
+            /* 移动端 CTA 调整 */
+            .apple-cta-wrapper { margin-top: 10px; height: 16px; } 
+            .apple-cta { font-size: 12px; }
+            .apple-cta .play-icon { width: 14px; height: 14px; font-size: 6px; margin-left: 4px; }
 
             .carousel-container { height: 45vh; border-radius: 20px; }
             .apple-carousel-container { border-radius: 20px; }
@@ -167,15 +303,31 @@
             .swisse-card-landscape { width: calc(40vh * 16 / 9); }
             .swisse-card-portrait { width: calc(40vh * 3 / 4); }
             .swisse-card-img { height: 40vh; border-radius: 20px; }
-            .swisse-card-text { font-size: 13px !important; line-height: 1.6 !important; }
-            .swisse-card-text b { font-size: 13px !important; color: var(--text-white); }
-            .swisse-swipe-hint { display: block; text-align: center; font-size: 12px; color: var(--text-gray); padding: 10px 0 20px; margin-top: -10px; font-weight: 600; }
-            .hover-overlay { opacity: 1; background: none; align-items: flex-end; justify-content: flex-end; padding: 15px; }
-            .view-detail-btn { padding: 6px 15px; font-size: 11px; }
+            .swisse-card-text { font-size: 15px !important; line-height: 1.6 !important; }
+            .swisse-swipe-hint { display: block; text-align: center; font-size: 14px;
+                color: var(--text-gray); padding: 10px 0 20px; margin-top: -10px; font-weight: 600;
+            }
+            
+            /* 收尾板块移动端适配 */
+            section.ending-section { min-height: 25vh; padding-top: 40px; }
+            .ending-text { font-size: clamp(24px, 6.5vw, 32px); letter-spacing: 2px; } /* 移动端严格对齐向下指示器字号 */
+
+            .hover-overlay { opacity: 1; background: none; align-items: flex-end;
+                justify-content: flex-end; padding: 15px; }
+            .view-detail-btn { padding: 8px 18px; font-size: 13px; }
         }
     </style>
 </head>
 <body>
+    <script>
+        // 【核心修复：防跳动保护】
+        // 在DOM刚渲染时，立即阻断浏览器自动向下恢复历史滚动位置的默认行为
+        if ('scrollRestoration' in history) {
+            history.scrollRestoration = 'manual';
+        }
+        window.scrollTo(0, 0);
+    </script>
+    
     <nav>
         <div class="logo">SUKIE.XIE</div>
         <a href="mailto:xieis@foxmail.com" class="btn-touch">Connect</a>
@@ -191,8 +343,13 @@
             </div>
             <div class="hero-desc">
                 拥有10年数字营销行业经验，具备从策略规划到项目落地的全链路管理能力。<br>
-                长期服务于世界500强及国内顶尖品牌，对快消、美与健康等领域有深刻洞察。<br>
+                长期服务于世界500强及国内顶尖品牌，对快消、美和健康等领域有深刻洞察。<br>
                 在工作之外，有跨领域学习的内在驱动力，对经济周期与半导体行业有长期观察与好奇。
+            </div>
+            
+            <div class="scroll-down-indicator">
+                <span class="text">往下，全是战绩</span>
+                <span class="arrow"></span>
             </div>
         </div>
     </section>
@@ -215,7 +372,7 @@
 
             <div class="stacked-text">
                 <ul>
-                    <li>主导行业首款“免洗护发素”从0到1上市策划，面对消费者认知的市场空白，制定“专业信任x场景种草”整合策略，打造「百试不腻吉尼斯挑战事件」「高考营销18岁的美只有一次」等案例，助推新品京东搜索增长 200%，天猫搜索增长166%</li>
+                    <li>主导行业首款“免洗护发素”<b>从0到1</b>上市策划，面对消费者认知的市场空白，制定“专业信任x场景种草”整合策略，打造「百试不腻吉尼斯挑战事件」「高考营销18岁的美只有一次」等案例，助推新品<b>京东搜索增长 200%，天猫搜索增长166%</b></li>
                 </ul>
             </div>
             <div class="apple-gallery-wrapper">
@@ -230,16 +387,21 @@
                 <div class="apple-pills-wrapper">
                     <div class="apple-pills">
                         <button class="pill active">高考营销</button>
-                        <button class="pill">高考纪录片</button>
+                        <button class="pill" data-video="https://www.xinpianchang.com/a10863490">高考纪录片</button>
                         <button class="pill">吉尼斯挑战事件</button>
                         <button class="pill">品牌30周年</button>
                     </div>
+                </div>
+                <div class="apple-cta-wrapper">
+                    <a href="#" target="_blank" class="apple-cta">
+                        观看影片<span class="play-icon">▶</span>
+                    </a>
                 </div>
             </div>
 
             <div class="stacked-text">
                 <ul>
-                    <li>视障人群对美的需求几乎无人关注，打破常规以免洗新品解开美的盲区，推出「会说话的护发素」，搭建首个闭眼也能看的变美平台，并吸引头部主播【李佳琦亲自选品】直播推荐，一举打破新品市场僵局</li>
+                    <li>视障人群对美的需求几乎无人关注，打破常规以免洗新品解开美的盲区，推出「会说话的护发素」，搭建首个闭眼也能看的变美平台，并吸引头部主播【<b>李佳琦亲自选品</b>】直播推荐，一举打破新品市场僵局</li>
                 </ul>
             </div>
             <div class="apple-gallery-wrapper">
@@ -252,13 +414,18 @@
                 <div class="apple-pills-wrapper">
                     <div class="apple-pills">
                         <button class="pill active">无障碍公益</button>
-                        <button class="pill">山区儿童公益</button>
+                        <button class="pill" data-video="https://www.xinpianchang.com/a11321451">山区儿童公益</button>
                     </div>
+                </div>
+                <div class="apple-cta-wrapper">
+                    <a href="#" target="_blank" class="apple-cta">
+                        观看影片<span class="play-icon">▶</span>
+                    </a>
                 </div>
             </div>
 
             <div class="stacked-text">
-                <p class="sub-h" style="border-top: 1px solid #222; padding-top: 15px; margin-top: 10px;">负责海飞丝头皮健康白皮书传播、吉列新品上市&明星直播、宝洁洗发品类商超国风 CNY 营销。从深挖洞察，到专业化背书、social、线下渠道全链路营销覆盖</p>
+                <p class="sub-h" style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 15px; margin-top: 10px;">负责海飞丝头皮健康白皮书传播、吉列新品上市&明星直播、宝洁洗发品类商超国风 CNY 营销。<b>从深挖洞察，到专业化背书、social、线下渠道全链路营销覆盖</b></p>
             </div>
             <div class="carousel-container" data-gallery="pg-4">
                 <div class="carousel-slides">
@@ -285,11 +452,11 @@
                     <div class="swisse-card-text">成功引领胶原水光瓶成为社交媒体“新时尚”，<b>实现从功能性向生活方式的强势破圈</b>。</div>
                 </div>
                 <div class="swisse-card swisse-card-landscape">
-                    <div class="swisse-card-img"><img class="lazy-img" data-src="dbf3.png"><div class="hover-overlay"><button class="view-detail-btn">查看大图</button></div></div>
+                    <div class="swisse-card-img"><img class="lazy-img" data-src="dbf1.png"><div class="hover-overlay"><button class="view-detail-btn">查看大图</button></div></div>
                     <div class="swisse-card-text">切入时尚运动赛道，携手冲浪垂类圈层，<b>将蛋白粉打造成时尚运动圈层新宠</b>.</div>
                 </div>
                 <div class="swisse-card swisse-card-portrait">
-                    <div class="swisse-card-img"><img class="lazy-img" data-src="dbf4.png"><div class="hover-overlay"><button class="view-detail-btn">查看大图</button></div></div>
+                    <div class="swisse-card-img"><img class="lazy-img" data-src="dbf2.png"><div class="hover-overlay"><button class="view-detail-btn">查看大图</button></div></div>
                     <div class="swisse-card-text">于三亚万宁落地「浪尖 S 俱乐部」快闪活动，以“强种草+天猫超市周年庆联动”驱动传播爆发，<b>达成总曝光 7700W+ 次</b>.</div>
                 </div>
             </div>
@@ -303,7 +470,7 @@
                 <p class="tag-line">ENTERTAINMENT MARKETING</p>
                 <h2 class="brand-h">合生元 <span style="color:var(--highlight-orange)">品牌年轻化和综艺IP营销</span></h2>
                 <ul>
-                    <li>育儿焦虑、“新国标”多重挑战之下，为品牌焕新「妈妈少担心」主体性表达，策划综艺《披荆斩棘哥哥》王耀庆《乘风破浪姐姐》Ella植入营销，精准传递松弛育儿观和品牌内在保护独特RTB，相关TVC视频播放量高达 2.1 亿，全网总曝光量达到 7.4 亿</li>
+                    <li>育儿焦虑、“新国标”多重挑战之下，为品牌焕新「妈妈少担心」主体性表达，策划综艺《披荆斩棘哥哥》王耀庆《乘风破浪姐姐》Ella植入营销，精准传递松弛育儿观和品牌内在保护独特RTB，相关<b>TVC视频播放量高达 2.1 亿，全网总曝光量达到 7.4 亿</b></li>
                     <li>针对核心母婴店，策划每月“奶粉+营养品”销冠组合活动，以品牌理念x亲子体验双赋能渠道转化</li>
                 </ul>
             </div>
@@ -339,6 +506,10 @@
         </div>
     </section>
 
+    <section class="ending-section">
+        <div class="ending-text">期待见面细聊</div>
+    </section>
+
     <div class="lightbox-overlay" id="lbOverlay">
         <button class="lb-close" id="lbClose">✕</button>
         <button class="lb-nav prev" id="lbPrev">◀</button>
@@ -354,11 +525,9 @@
                         const img = en.target;
                         const realSrc = img.getAttribute('data-src');
                         if (realSrc) {
-                            // 彻底本地化，直接加载src，不需要data-fallback
                             img.src = realSrc;
                             img.onload = () => img.classList.add('loaded');
-                            img.onerror = () => img.classList.add('loaded'); 
-                            // 3秒无条件结束模糊
+                            img.onerror = () => img.classList.add('loaded');
                             setTimeout(() => img.classList.add('loaded'), 3000);
                         }
                         obs.unobserve(img);
@@ -369,11 +538,16 @@
         }
 
         function initCarousels() {
+            // 【核心修复：为普通轮播图补充完整的自动播放逻辑】
             document.querySelectorAll('.carousel-container').forEach(con => {
                 const slides = con.querySelector('.carousel-slides');
+                if (!slides) return;
                 const total = slides.children.length;
                 const dotsCon = con.querySelector('.carousel-dots');
+                
                 let idx = 0;
+                let autoPlayTimer;
+
                 if (total <= 1) return;
                 if (dotsCon) {
                     for(let i=0; i<total; i++) {
@@ -386,14 +560,28 @@
                     slides.style.transform = `translateX(-${idx*100}%)`;
                     if (dotsCon) dotsCon.querySelectorAll('.dot').forEach((d,i) => d.className = i===idx?'dot active':'dot');
                 };
-                con.querySelector('.prev')?.addEventListener('click', (e) => { e.stopPropagation(); idx=(idx-1+total)%total; update(); });
-                con.querySelector('.next')?.addEventListener('click', (e) => { e.stopPropagation(); idx=(idx+1)%total; update(); });
+
+                const startAutoPlay = () => {
+                    stopAutoPlay();
+                    autoPlayTimer = setInterval(() => { idx = (idx + 1) % total; update(); }, 4000); 
+                };
+                const stopAutoPlay = () => clearInterval(autoPlayTimer);
+
+                con.querySelector('.prev')?.addEventListener('click', (e) => { e.stopPropagation(); idx=(idx-1+total)%total; update(); startAutoPlay(); });
+                con.querySelector('.next')?.addEventListener('click', (e) => { e.stopPropagation(); idx=(idx+1)%total; update(); startAutoPlay(); });
+                
                 let sX = 0;
-                con.addEventListener('touchstart', (e) => sX = e.touches[0].clientX, {passive:true});
+                con.addEventListener('touchstart', (e) => { sX = e.touches[0].clientX; stopAutoPlay(); }, {passive:true});
                 con.addEventListener('touchend', (e) => {
                     let dX = e.changedTouches[0].clientX - sX;
                     if(Math.abs(dX) > 50) { if(dX > 0) idx=(idx-1+total)%total; else idx=(idx+1)%total; update(); }
+                    startAutoPlay();
                 });
+                con.addEventListener('mouseenter', stopAutoPlay);
+                con.addEventListener('mouseleave', startAutoPlay);
+
+                // 启动自动播放
+                startAutoPlay();
             });
         }
 
@@ -403,16 +591,34 @@
                 const total = slides.children.length;
                 const pillsWrapper = wrapper.querySelector('.apple-pills'); 
                 const pills = wrapper.querySelectorAll('.apple-pills .pill');
+                
+                const ctaWrapper = wrapper.querySelector('.apple-cta-wrapper');
+                const ctaLink = wrapper.querySelector('.apple-cta');
+
                 let idx = 0;
                 let autoPlayTimer;
 
-                const update = () => {
+                const update = (isInit = false) => {
                     slides.style.transform = `translateX(-${idx * 100}%)`;
                     pills.forEach((pill, i) => {
                         pill.classList.toggle('active', i === idx);
-                        if (i === idx && pillsWrapper) {
-                            const scrollPos = pill.offsetLeft - (pillsWrapper.clientWidth / 2) + (pill.clientWidth / 2);
-                            pillsWrapper.scrollTo({ left: scrollPos, behavior: 'smooth' });
+                        if (i === idx) {
+                            // 【核心保留：防跳屏保护】
+                            if (pillsWrapper && !isInit) {
+                                const scrollPos = pill.offsetLeft - (pillsWrapper.clientWidth / 2) + (pill.clientWidth / 2);
+                                pillsWrapper.scrollLeft = scrollPos;
+                            }
+                            
+                            // CTA 动态条件显示逻辑
+                            if (ctaWrapper && ctaLink) {
+                                const videoUrl = pill.getAttribute('data-video');
+                                if (videoUrl) {
+                                    ctaLink.href = videoUrl;
+                                    ctaWrapper.classList.add('visible');
+                                } else {
+                                    ctaWrapper.classList.remove('visible');
+                                }
+                            }
                         }
                     });
                 };
@@ -426,7 +632,6 @@
                 pills.forEach((pill, i) => {
                     pill.addEventListener('click', () => { idx = i; update(); startAutoPlay(); });
                 });
-
                 let sX = 0;
                 const con = wrapper.querySelector('.apple-carousel-container');
                 con.addEventListener('touchstart', (e) => { sX = e.touches[0].clientX; stopAutoPlay(); }, {passive:true});
@@ -439,10 +644,11 @@
                     }
                     startAutoPlay();
                 });
-
                 wrapper.addEventListener('mouseenter', stopAutoPlay);
                 wrapper.addEventListener('mouseleave', startAutoPlay);
 
+                // 首次执行传入 true，静默初始化防跳动
+                update(true); 
                 startAutoPlay();
             });
         }
@@ -453,7 +659,6 @@
             let currentImgs = []; let currentIdx = 0;
             const openLb = (galleryId, startSrc) => {
                 const container = document.querySelector(`[data-gallery="${galleryId}"]`);
-                // 灯箱依然保持本地图，确保速度
                 currentImgs = Array.from(container.querySelectorAll('img')).map(i => i.src || i.getAttribute('data-src'));
                 currentIdx = currentImgs.indexOf(startSrc);
                 if (currentIdx === -1) currentIdx = 0; 
@@ -488,7 +693,8 @@
             ctx.rotate(-20 * Math.PI / 180);
             ctx.fillText(text, 20, 100);
             const div = document.createElement('div');
-            div.style.position = 'fixed'; div.style.top = '0'; div.style.left = '0';
+            div.style.position = 'fixed'; div.style.top = '0';
+            div.style.left = '0';
             div.style.width = '100vw'; div.style.height = '100vh';
             div.style.pointerEvents = 'none'; div.style.zIndex = '9998'; 
             div.style.backgroundImage = `url(${canvas.toDataURL('image/png')})`;
@@ -499,8 +705,9 @@
             try {
                 if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
                     gsap.registerPlugin(ScrollTrigger);
+                    // 保留 ending-text 的 GSAP 滚动浮现监听队列
                     gsap.utils.toArray('section').forEach(sec => {
-                        gsap.from(sec.querySelectorAll('.project-text, .carousel-container, .swisse-wrapper, .stacked-text, .apple-gallery-wrapper'), {
+                        gsap.from(sec.querySelectorAll('.project-text, .carousel-container, .swisse-wrapper, .stacked-text, .apple-gallery-wrapper, .ending-text'), {
                             scrollTrigger: { trigger: sec, start: "top 85%" },
                             y: 30, opacity: 0, duration: 0.8, stagger: 0.1
                         });
