@@ -5,6 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="referrer" content="no-referrer">
     <title>Sukie Xie | Portfolio</title>
+    <script>
+        if ('scrollRestoration' in history) {
+            history.scrollRestoration = 'manual';
+        }
+        window.scrollTo(0, 0);
+    </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     <style>
@@ -50,7 +56,6 @@
             font-weight: 600;
         }
 
-        /* 简化的银白精密发光分割线，高光明显 */
         section {
             min-height: 100vh;
             width: 100%; display: flex; align-items: center; justify-content: center;
@@ -58,21 +63,18 @@
             background-color: var(--bg-black);
         }
         
+        /* 优化：修复发光线不自然的问题。改用极其克制、内敛的线性渐变光丝，去除图层突兀感 */
         section:not(.hero)::before {
             content: "";
             position: absolute;
             top: 0;
-            left: 5%; /* 居中，两端留白 */
-            width: 90%;
+            left: 10%; /* 缩短长度，更加精致 */
+            width: 80%;
             height: 1px;
-            /* 极简银白径向渐变，中心亮，两端淡出 */
-            background: radial-gradient(circle at center, rgba(255,255,255,1) 0%, rgba(255,255,255,0.5) 50%, transparent 100%);
-            /* 双重阴影叠加：核心高亮 + 弥散银灰色光晕，使发光明显且高级 */
-            box-shadow: 
-                0 0 10px 1px rgba(255, 255, 255, 0.8), 
-                0 0 25px 4px rgba(200, 200, 205, 0.5); 
-            opacity: 0.9;
-            z-index: 2;
+            background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.4) 50%, transparent 100%);
+            box-shadow: 0 0 12px 1px rgba(255, 255, 255, 0.15); 
+            z-index: 0; /* 置于底层 */
+            pointer-events: none;
         }
 
         .content-grid, .hero-content { z-index: 1; position: relative; width: 100%; }
@@ -87,7 +89,6 @@
         .avatar-box img { width: 100%; height: 100%; object-fit: cover; }
         .hero-desc { max-width: 600px; font-size: 16px; color: var(--text-gray); margin: 0 auto; line-height: 1.6; }
 
-        /* 滑动指示器默认在PC端隐藏，移动端显示 */
         .scroll-down-indicator { display: none; }
 
         .content-grid { display: grid; grid-template-columns: 0.9fr 1.4fr; gap: 40px; align-items: center; max-width: 1400px; }
@@ -103,30 +104,33 @@
         
         .footer-text { font-size: 14px; color: var(--text-gray); border-top: 1px solid #222; padding-top: 12px; line-height: 1.4; }
 
-        /* ======== 图片容器与展示优化 (修复裁切问题，保留微圆角) ======== */
+        /* ======== 优化：图片容器去灰框，实现Apple级纯净包裹感 ======== */
         .carousel-container {
             position: relative; width: 100%; height: 70vh; overflow: hidden; 
             border-radius: 24px; 
-            background: #111; box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            background: transparent; /* 去除原本的 #111 灰底 */
+            box-shadow: none; /* 去除容器阴影，让图片自然融入黑底 */
         }
         .carousel-slides { display: flex; width: 100%; height: 100%; transition: transform 0.5s ease; }
         .carousel-slide { 
             flex: 0 0 100%; position: relative; background: transparent; 
-            display: flex; align-items: center; justify-content: center; /* 居中内容 */
+            display: flex; align-items: center; justify-content: center; 
         }
-        /* 确保图片完整显示，并且自带边缘微微圆弧 */
+        /* 图片 100% 完整显示，且自带 12px 精致微圆角 */
         .carousel-slide img { 
             max-width: 100%; max-height: 100%; width: auto; height: auto; 
             object-fit: contain; border-radius: 12px; 
         }
 
         .hover-overlay {
-            position: absolute; inset: 0; background: rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center;
-            opacity: 0; transition: opacity 0.3s; z-index: 20; border-radius: 24px;
+            position: absolute; inset: 0; background: transparent; display: flex; align-items: center; justify-content: center;
+            opacity: 0; transition: opacity 0.3s; z-index: 20; pointer-events: none; /* 穿透点击，避免空区域拦截手势 */
         }
         .carousel-slide:hover .hover-overlay, .swisse-card-img:hover .hover-overlay { opacity: 1; }
-        .view-detail-btn { background: var(--accent-yellow); color: black; padding: 10px 24px; border-radius: 30px;
-            font-weight: 800; font-size: 14px; border: none; cursor: pointer; }
+        .view-detail-btn { 
+            background: var(--accent-yellow); color: black; padding: 10px 24px; border-radius: 30px;
+            font-weight: 800; font-size: 14px; border: none; cursor: pointer; pointer-events: auto; /* 按钮恢复可点击 */
+        }
 
         .carousel-btn {
             position: absolute; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.6); color: white; border: none;
@@ -148,7 +152,8 @@
         .apple-carousel-container {
             position: relative; width: 100%; height: 60vh; overflow: hidden; 
             border-radius: 24px; 
-            background: #111; box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            background: transparent; /* 去底色 */
+            box-shadow: none;
         }
         
         .apple-pills-wrapper { width: 100%; display: flex; justify-content: center; margin-top: 15px; }
@@ -197,9 +202,9 @@
         .swisse-card-portrait { width: calc(45vh * 3 / 4); }
         .swisse-card-img { 
             width: 100%; height: 45vh; border-radius: 24px; overflow: hidden; position: relative; 
-            background: #111; display: flex; align-items: center; justify-content: center;
+            background: transparent; /* 去底色 */
+            display: flex; align-items: center; justify-content: center;
         }
-        /* 确保Swisse图片也不被裁剪，且有微圆弧 */
         .swisse-card-img img { 
             max-width: 100%; max-height: 100%; width: auto; height: auto; 
             object-fit: contain; border-radius: 12px; 
@@ -238,7 +243,6 @@
             .content-grid { display: flex; flex-direction: column; gap: 20px; }
             .content-grid.img-left { flex-direction: column-reverse; }
             
-            /* 移动端下滑指示器大字号及平缓动画 */
             .scroll-down-indicator {
                 display: flex; flex-direction: column; align-items: center; gap: 15px; margin-top: 5vh;
                 animation: breathe 3s infinite ease-in-out;
@@ -275,15 +279,6 @@
     </style>
 </head>
 <body>
-    <script>
-        // 【核心修复：防跳动保护】
-        // 在DOM刚渲染时，强制重置滚动条并在浏览器级别切断历史跳转行为
-        if ('scrollRestoration' in history) {
-            history.scrollRestoration = 'manual';
-        }
-        window.scrollTo(0, 0);
-    </script>
-    
     <nav>
         <div class="logo">SUKIE.XIE</div>
         <a href="mailto:xieis@foxmail.com" class="btn-touch">Connect</a>
@@ -299,7 +294,7 @@
             </div>
             <div class="hero-desc">
                 拥有10年数字营销行业经验，具备从策略规划到项目落地的全链路管理能力。<br>
-                长期服务于世界500强及国内顶尖品牌，对快消、美与健康等领域有深刻洞察。<br>
+                长期服务于世界500强及国内顶尖品牌，对快消、美和健康等领域有深刻洞察。<br>
                 在工作之外，有跨领域学习的内在驱动力，对经济周期与半导体行业有长期观察与好奇。
             </div>
             
@@ -533,7 +528,6 @@
                     startAutoPlay();
                 });
                 
-                // 【核心修复：只在可见时自动播放，彻底防止后台滚动导致全屏跳跃】
                 const observer = new IntersectionObserver((entries) => {
                     entries.forEach(entry => {
                         if (entry.isIntersecting) {
@@ -570,7 +564,6 @@
                                 pillsWrapper.scrollLeft = scrollPos;
                             }
                             
-                            // CTA 动态条件显示逻辑
                             if (ctaWrapper && ctaLink) {
                                 const videoUrl = pill.getAttribute('data-video');
                                 if (videoUrl) {
@@ -606,7 +599,6 @@
                     startAutoPlay();
                 });
 
-                // 【核心修复：视口监听保护】
                 const observer = new IntersectionObserver((entries) => {
                     entries.forEach(entry => {
                         if (entry.isIntersecting) {
@@ -671,6 +663,11 @@
         }
 
         window.onload = () => {
+            // 【终极防跳屏：即使有任何延迟渲染导致页面滚动，也要强制置顶】
+            setTimeout(() => {
+                window.scrollTo(0, 0);
+            }, 50);
+            
             try {
                 if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
                     gsap.registerPlugin(ScrollTrigger);
